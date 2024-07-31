@@ -4,7 +4,7 @@ import {router} from './router';
 import { createApp } from 'vue';
 import App from './App.vue';
 // import router from '@/router/router.js'
-// import MyPageApp from "./MyPageApp.vue";
+
 
 createApp(App).use(router).mount('#app'); // App.vue 컴포넌트가 index.html에서 id값이 app인 요소에 마운트됨
-// createApp(MyPageApp).use(router).mount('#mypageapp')
+
