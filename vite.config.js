@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
 
-function fileURLToPath(url) {
-  return "";
-}
+// function fileURLToPath(url) {
+//   return "";
+// }
 
 export default defineConfig({
   plugins: [vue()],
