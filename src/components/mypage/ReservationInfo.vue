@@ -4,14 +4,14 @@
     <p>총 예약 건수: {{ reservations.length }}건</p>
     <div class="reservation-list">
       <div v-for="reservation in reservations" :key="reservation.reservationId" class="reservation-item">
-        <img :src=reservation.storeImage alt="Store image" class="reservation-image" />
+        <img :src="reservation.storeImage ? reservation.storeImage : 'https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Store image" class="reservation-image" />
         <div class="reservation-details">
           <h3>{{ reservation.themeTitle }}</h3>
-          <p><strong>예약일:</strong> {{ reservation.startTime }}</p>
+          <p><strong>예약일:</strong> {{ formatDate(reservation.startTime) }}</p>
           <p><strong>방탈출 카페:</strong> {{ reservation.storeName }}</p>
           <p><strong>인원:</strong> {{ reservation.player }}인</p>
           <p><strong>가격:</strong> {{ reservation.price }} 원</p>
-          <p><strong>예약 상태:</strong> {{ reservation.reservationStatus }}</p>
+          <p><strong>예약 상태:</strong> {{ getReservationStatusText(reservation.reservationStatus) }}</p>
         </div>
         <div class="reservation-actions">
           <button
@@ -73,6 +73,24 @@ export default {
       const today = new Date();
       const reservationDate = new Date(date);
       return reservationDate < today;
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
+    },
+    getReservationStatusText(status) {
+      if (status === 'ACTIVE') {
+        return '예약 완료';
+      } else if (status === 'DEACTIVE') {
+        return '예약 취소';
+      } else {
+        return '알 수 없는 상태';
+      }
     },
     cancelReservation(id) {
       // 예약 취소 로직
