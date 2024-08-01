@@ -27,54 +27,46 @@
 </template>
 
 <script>
-
+import {axiosConsumer} from "@/axios.js";
 
 export default {
   name: 'UserInfo',
   data() {
     return {
-      name: '',
-      email: '',
-      phone: '',
-      points: ''
+      user: {
+        name: '',
+        email: '',
+        point: ''
+      }
     }
   },
   computed: {
     userInfo() {
       return {
-        이름: "이서연",
-        이메일: "0817frog@gmail.com",
-        전화번호: "0817frog@gmail.com",
-        가입일: "0817frog@gmail.com",
-        // 탈출횟수: this.user.escapeCount,
-        포인트: "0817frog@gmail.com"
-        // 이름: this.user.name,
-        // 이메일: this.user.email,
-        // 전화번호: this.user.phone,
-        // 가입일: this.user.joinDate,
-        // // 탈출횟수: this.user.escapeCount,
-        // 포인트: this.user.point
+        이름: this.user.name,
+        이메일: this.user.email,
+        포인트: this.user.point
       }
     }
   },
-  // created() {
-  //   this.fetchUserProfile();
-  // },
-  // methods: {
-  //   async fetchUserProfile() {
-  //     try {
-  //       const response = await axios.get('/profile');
-  //       const userData = response.data.data;
-  //       this.user = {
-  //         name: userData.name,
-  //         email: userData.email,
-  //         points: userData.points
-  //       };
-  //     } catch (error) {
-  //       console.error('Error fetching user profile:', error);
-  //     }
-  //   }
-  // }
+  async created() {
+    await this.fetchUserProfile();
+  },
+  methods: {
+    async fetchUserProfile() {
+      try {
+        const response = await axiosConsumer.get('/users/profile');
+        const userData = response.data.data;
+        this.user = {
+          name: userData.name,
+          email: userData.email,
+          point: userData.point
+        };
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    }
+  }
 }
 </script>
 

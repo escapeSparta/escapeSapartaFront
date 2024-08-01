@@ -16,7 +16,7 @@
 
 <script>
 import axios from 'axios'
-import {axiosCoreInstance} from "@/axios.js";
+import {axiosCore} from "@/axios.js";
 
 export default {
   data() {
@@ -31,7 +31,7 @@ export default {
 
     async login() {
       try {
-        const response = await axios.post('http://localhost:8080/users/login', {
+        const response = await axiosCore.post('/users/login', {
           email: this.email,
           password: this.password
         })
@@ -41,12 +41,13 @@ export default {
 
         console.log('Response headers:', response.headers);
 
-        const accessToken = response.headers['authorization']; // 헤더 이름을 소문자로 접근
-        const refreshToken = response.headers['refreshtoken']; // 헤더 이름을 소문자로 접근
+        const accessToken = response.headers['authorization'];
+        const refreshToken = response.headers['refreshtoken'];
         console.log(accessToken);
 
-        // localStorage.setItem('Authorization', accessToken);
-        // localStorage.setItem('RefreshToken', refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+
         this.moveMain();
 
       } catch (error) {

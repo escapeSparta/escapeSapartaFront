@@ -1,15 +1,16 @@
 <template>
   <div class="content">
     <h1>팔로우한 지점</h1>
+    <p>팔로우한 지점 수: {{ stores.length }}개</p>
     <div class="grid">
-      <div class="card">
-        <img src="https://websim.ai/neon-store-corner.jpg" alt="Neon lit store corner at night" width="100%" height="150">
-        <h3>강남점</h3>
-        <p>주소: 서울특별시 강남구 테헤란로 123</p>
-        <p>전화: 02-1234-5678</p>
+      <div v-for="store in stores" :key="store.storeId" class="card">
+        <img :src="store.storeImage ? store.storeImage : 'https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Neon lit store corner at night" width="100%" height="150">
+        <h3>{{ store.name }}</h3>
+        <p>{{ store.address }}</p>
+        <p>전화: {{ store.phoneNumber }}</p>
         <div class="button-group">
           <button class="button">예약하기</button>
-          <button class="button">팔로우 취소</button>
+          <button class="button" id="unfollow-button">팔로우 취소</button>
         </div>
       </div>
 
@@ -73,32 +74,25 @@
 
 <script>
 import axios from 'axios';
+import {axiosConsumer} from "@/axios.js";
 
 export default {
   name: 'FollowInfo',
   data() {
     return {
-      name: '',
-      address: '',
-      phoneNumber: '',
-      storeImage: ''
+      stores: []
     }
   },
+  async created() { // 컴포넌트가 생성된 후 호출
+    await this.fetchFollowStores();
+  },
   methods: {
-    async followInfo() {
+    async fetchFollowStores() {
       try {
-        const response = await axios.get('/follow/stores');
-        const userData = response.data.data;
-        this.user = {
-          avatar: userData.avatar || '', // avatar 데이터가 있을 경우 사용
-          name: userData.name,
-          email: userData.email,
-          phone: userData.phone,
-          joinDate: userData.createdAt,
-          points: userData.point
-        };
+        const response = await axiosConsumer.get('/follow/stores');
+        this.stores = response.data.data;
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error fetching follow Stores:', error);
       }
     }
   }

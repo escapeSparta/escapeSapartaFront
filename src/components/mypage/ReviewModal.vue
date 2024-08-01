@@ -2,10 +2,10 @@
   <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <h1>리뷰 작성</h1>
-      <p><strong>방탈출 카페:</strong> 루나 강남점</p>
-      <p><strong>테마:</strong> 테마 이름</p>
-<!--      <p><strong>방탈출 카페:</strong> {{ escapeCafeName }}</p>-->
-<!--      <p><strong>테마:</strong> {{ themeName }}</p>-->
+<!--      <p><strong>방탈출 카페:</strong> 루나 강남점</p>-->
+<!--      <p><strong>테마:</strong> 테마 이름</p>-->
+      <p><strong>방탈출 카페:</strong> {{ storeName }}</p>
+      <p><strong>테마:</strong> {{ themeName }}</p>
       <div class="rating">
 <!--        <label for="rate">별점:</label>-->
         <span v-for="star in 5" :key="star" @click="setRating(star)" class="star" :class="{ filled: star <= rating }">&#9733;</span>
@@ -30,14 +30,14 @@ export default {
       type: Boolean,
       required: true
     },
-    // escapeCafeName: {
-    //   type: String,
-    //   required: true
-    // },
-    // themeName: {
-    //   type: String,
-    //   required: true
-    // }
+    storeName: {
+      type: String,
+      required: true
+    },
+    themeName: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
