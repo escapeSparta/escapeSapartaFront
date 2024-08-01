@@ -17,13 +17,14 @@
           <button
               v-if="isPastDate(reservation.startTime) && !isDeactive(reservation.reservationStatus)"
               class="button review-button"
-              @click="openReviewModal(reservation.storeName, reservation.themeTitle)"
+              @click="openReviewModal(reservation.reservationId, reservation.storeName, reservation.themeTitle)"
           >
             리뷰 쓰기
           </button>
           <button
               v-if="!isPastDate(reservation.startTime) && !isDeactive(reservation.reservationStatus)"
               class="button cancel-button"
+              @click="cancelReservation(reservation.reservationId)"
           >
             예약 취소
           </button>
@@ -33,6 +34,7 @@
   </div>
   <ReviewModal
       :isVisible="isModalVisible"
+      :reservationId="selectedReservationId"
       :storeName="selectedStoreName"
       :themeName="selectedThemeName"
       @close="closeReviewModal"
@@ -54,6 +56,7 @@ export default {
       isModalVisible: false,
       selectedStoreName: '',
       selectedThemeName: '',
+      selectedReservationId: 0,
       reservations: [], // 예약 내역 배열
     };
   },
@@ -92,14 +95,37 @@ export default {
         return '알 수 없는 상태';
       }
     },
-    cancelReservation(id) {
-      // 예약 취소 로직
-      alert(`예약 ${id}이(가) 취소되었습니다.`);
+    async cancelReservation(id) {
+      // 사용자에게 확인 팝업을 표시합니다.
+      const isConfirmed = confirm(`정말로 예약을 취소하시겠습니까?`);
+
+      // 사용자가 확인을 클릭한 경우에만 API를 호출합니다.
+      if (isConfirmed) {
+        try {
+          // 예약 취소 API 호출
+          const response = await axiosReservation.delete(`/reservations/${id}`);
+
+          // 예약 목록을 업데이트합니다. (예: 취소된 예약을 제외한 예약 목록으로 업데이트)
+          this.reservations = response.data.data;
+
+          // 취소 완료 알림
+          alert(`예약이(가) 취소되었습니다.`);
+          await this.fetchReservations();
+        } catch (error) {
+          console.error('Error cancelling reservation:', error);
+          // 에러 발생 시 사용자에게 알림
+          alert('예약 취소 중 오류가 발생했습니다.');
+        }
+      } else {
+        // 사용자가 취소를 클릭했을 때의 처리를 할 수 있습니다. (필요시)
+        console.log('예약 취소가 취소되었습니다.');
+      }
     },
     isDeactive(status) {
       return status === 'DEACTIVE';
     },
-    openReviewModal(storeName, themeName) {
+    openReviewModal(id, storeName, themeName) {
+      this.selectedReservationId = id;
       this.selectedStoreName = storeName;
       this.selectedThemeName = themeName;
       this.isModalVisible = true;
@@ -116,8 +142,7 @@ export default {
 }
 
 .reservation-list {
-  max-height: 80vh; /* 스크롤을 위해 최대 높이 설정 */
-  overflow-y: auto; /* 세로 스크롤 활성화 */
+  padding-left: 15px; /* 왼쪽 패딩 추가 */
 }
 
 .reservation-item {
@@ -162,7 +187,7 @@ export default {
 }
 
 .review-button {
-  background-color: black;
+  background-color: transparent;
   color: #0f0; /* 리뷰 버튼 색상 */
   border: 1px solid #0f0;
 }
