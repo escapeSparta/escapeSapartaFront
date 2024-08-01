@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>EscapeSparta - 전국 방탈출 검색 및 인기 테마</title>
+  <style>
+      body, html {
+          margin: 0;
+          padding: 0;
+          font-family: 'Noto Sans KR', sans-serif;
+          background-color: #000;
+          color: #0f0;
+          height: 100%;
+          box-sizing: border-box;
+      }
+      *, *:before, *:after {
+          box-sizing: inherit;
+      }
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem;
+      }
+      header {
+          background-color: rgba(0, 255, 0, 0.1);
+          padding: 1rem;
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+      .logo {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #0f0;
+          text-shadow: 0 0 10px #0f0;
+          text-decoration: none;
+      }
+      .buttons {
+          display: flex;
+          gap: 1rem;
+      }
+      .buttons button {
+          color: #0f0;
+          background-color: #000;
+          border: 1px solid #0f0;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+      }
+      .buttons button:hover {
+          background-color: #0f0;
+          color: #000;
+      }
+      h1, h2 {
+          text-align: center;
+          margin-top: 5rem;
+          text-shadow: 0 0 15px #0f0;
+      }
+      .search-section {
+          background-color: rgba(0, 255, 0, 0.05);
+          padding: 2rem;
+          border-radius: 10px;
+          box-shadow: 0 0 20px #0f0;
+          margin: 2rem 0;
+      }
+      .search-form {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 1rem;
+      }
+      input[type="text"], select {
+          padding: 0.5rem;
+          border: 1px solid #0f0;
+          background-color: #000;
+          color: #0f0;
+          border-radius: 5px;
+      }
+      button {
+          background-color: #0f0;
+          color: #000;
+          border: none;
+          padding: 0.5rem 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-radius: 5px;
+      }
+      button:hover {
+          background-color: #000;
+          color: #0f0;
+          border: 1px solid #0f0;
+      }
+      .search-results {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-top: 2rem;
+      }
+      .theme-card {
+          background-color: rgba(0, 255, 0, 0.05);
+          border-radius: 10px;
+          padding: 1rem;
+          text-align: center;
+          transition: all 0.3s ease;
+          display: flex;
+          flex-direction: column;
+      }
+      .theme-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+      }
+      .theme-image {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+          border-radius: 5px;
+          margin-bottom: 1rem;
+      }
+      .theme-details {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+      }
+      .theme-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+      }
+      .theme-location, .theme-genre, .theme-difficulty {
+          font-size: 0.9rem;
+          margin-bottom: 0.3rem;
+      }
+      .theme-rating {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.5rem;
+      }
+      .star {
+          color: #ff0;
+          font-size: 1.2rem;
+          margin-right: 0.2rem;
+      }
+      .book-button {
+          background-color: #0f0;
+          color: #000;
+          border: none;
+          padding: 0.5rem 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-radius: 5px;
+          font-size: 1rem;
+          text-align: center;
+          text-decoration: none;
+          display: block;
+      }
+      .book-button:hover {
+          background-color: #000;
+          color: #0f0;
+          border: 1px solid #0f0;
+      }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+<div id="app">
+  <header>
+    <a href="http://localhost:3000/src/components/main/store-search" class="logo">EscapeSparta</a>
+    <div class="buttons">
+      <button @click="login">로그인</button>
+      <button @click="signup">회원가입</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>전국 방탈출 카페 검색</h1>
+    <section id="search" class="search-section">
+      <form class="search-form" @submit.prevent="searchEscapeRooms">
+        <input type="text" v-model="keyword" placeholder="키워드 입력 (카페명, 테마명 등)" required>
+        <select v-model="region">
+          <option value="">지역 선택</option>
+          <option value="seoul">서울</option>
+          <option value="busan">부산</option>
+          <option value="daegu">대구</option>
+          <option value="incheon">인천</option>
+          <option value="gwangju">광주</option>
+          <option value="daejeon">대전</option>
+          <option value="ulsan">울산</option>
+          <option value="sejong">세종</option>
+          <option value="gyeonggi">경기도</option>
+          <option value="gangwon">강원도</option>
+          <option value="chungbuk">충청북도</option>
+          <option value="chungnam">충청남도</option>
+          <option value="jeonbuk">전라북도</option>
+          <option value="jeonnam">전라남도</option>
+          <option value="gyeongbuk">경상북도</option>
+          <option value="gyeongnam">경상남도</option>
+          <option value="jeju">제주도</option>
+        </select>
+        <button type="submit">검색</button>
+      </form>
+    </section>
+
+    <section class="search-results">
+      <div v-for="result in searchResults" :key="result.id" class="theme-card">
+        <img :src="result.image" :alt="result.title" class="theme-image" width="300" height="200">
+        <div class="theme-details">
+          <div>
+            <div class="theme-title">{{ result.title }}</div>
+            <div class="theme-location">{{ result.location }}</div>
+            <div class="theme-genre">장르: {{ result.genre }}</div>
+            <div class="theme-difficulty">난이도: {{ result.difficulty }}/5</div>
+            <div class="theme-rating">
+              <span class="star">★★★★</span> {{ result.rating }}/5 (리뷰 {{ result.reviews }}개)
+            </div>
+          </div>
+          <a :href="result.link" class="book-button">예약하기</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      keyword: '',
+      region: '',
+      searchResults: [
+        { id: 1, title: '사이버 반란', location: '강남구 테헤란로', genre: 'SF, 액션', difficulty: 4, rating: 4.5, reviews: 120, image: 'https://escapesparta.net/images/themes/cyber-rebellion.jpg', link: 'https://escapesparta.net/book/cyber-rebellion' },
+        { id: 2, title: '잃어버린 사원', location: '종로구 인사동길', genre: '모험, 판타지', difficulty: 3, rating: 4.2, reviews: 95, image: 'https://escapesparta.net/images/themes/lost-temple.jpg', link: 'https://escapesparta.net/book/lost-temple' },
+        { id: 3, title: '살인의 저택', location: '마포구 홍대거리', genre: '미스터리, 추리', difficulty: 5, rating: 4.8, reviews: 150, image: 'https://escapesparta.net/images/themes/murder-mansion.jpg', link: 'https://escapesparta.net/book/murder-mansion' },
+        { id: 4, title: '시간의 왜곡', location: '용산구 이태원로', genre: 'SF, 퍼즐', difficulty: 4, rating: 4.3, reviews: 80, image: 'https://escapesparta.net/images/themes/time-warp.jpg', link: 'https://escapesparta.net/book/time-warp' },
+        { id: 5, title: '유령 학교', location: '동작구 상도로', genre: '공포, 미스터리', difficulty: 3, rating: 4.1, reviews: 110, image: 'https://escapesparta.net/images/themes/ghost-school.jpg', link: 'https://escapesparta.net/book/ghost-school' },
+        { id: 6, title: '우주 정거장 탈출', location: '강서구 마곡동로', genre: 'SF, 생존', difficulty: 5, rating: 4.7, reviews: 130, image: 'https://escapesparta.net/images/themes/space-station.jpg', link: 'https://escapesparta.net/book/space-station' }
+      ]
+    },
+    methods: {
+      searchEscapeRooms() {
+        alert(`검색 키워드: ${this.keyword}, 선택된 지역: ${this.region || '전국'}`);
+        // 실제로는 여기서 검색 결과 페이지로 리다이렉트하거나 AJAX 요청을 보내야 합니다.
+      },
+      login() {
+        alert('로그인 버튼 클릭');
+        // 로그인 로직을 여기에 추가하세요.
+      },
+      signup() {
+        alert('회원가입 버튼 클릭');
+        // 회원가입 로직을 여기에 추가하세요.
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
