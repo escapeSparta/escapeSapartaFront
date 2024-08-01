@@ -4,7 +4,7 @@
       <div class="logo">EscapeSparta</div>
       <div>
         <router-link to="/" class="nav-link">홈</router-link>
-        <router-link to="/reservation" class="nav-link">예약하기</router-link>
+        <router-link to="/search-store" class="nav-link">검색</router-link>
         <router-link to="/reviews" class="nav-link">리뷰게시판</router-link>
         <router-link to="/profile" class="nav-link">프로필</router-link>
       </div>
