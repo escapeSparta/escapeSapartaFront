@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>EscapeSparta - 전국 방탈출 검색 및 인기 테마</title>
+  <link href="/src/css/main-theme.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+<div id="app">
+  <header>
+    <a href="http://localhost:3000/src/components/main/store-search" class="logo">EscapeSparta</a>
+    <div class="buttons">
+      <button @click="navigateTo('search.html')">방탈출 검색</button>
+      <button @click="navigateTo('login.html')">로그인</button>
+      <button @click="navigateTo('signup.html')">회원가입</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2 id="popular">이번 주 인기 테마</h2>
+    <section class="popular-themes">
+      <div v-for="theme in themes" :key="theme.id" class="theme-card">
+        <img :src="theme.image" :alt="theme.title" class="theme-image" width="200" height="150">
+        <h3>{{ theme.title }}</h3>
+        <p>{{ theme.location }}</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      themes: [
+        { id: 1, title: '사이버펑크 히스트', location: '서울 강남구', image: 'https://escapesparta.net/images/themes/cyberpunk-heist.jpg' },
+        { id: 2, title: '고대 사원의 비밀', location: '부산 해운대구', image: 'https://escapesparta.net/images/themes/ancient-temple.jpg' },
+        { id: 3, title: '우주 오딧세이', location: '대구 중구', image: 'https://escapesparta.net/images/themes/space-odyssey.jpg' },
+        { id: 4, title: '저주받은 저택', location: '인천 연수구', image: 'https://escapesparta.net/images/themes/haunted-mansion.jpg' },
+        { id: 5, title: '시간 여행자', location: '광주 동구', image: 'https://escapesparta.net/images/themes/time-traveler.jpg' }
+      ]
+    },
+    methods: {
+      navigateTo(page) {
+        window.location.href = page;
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
