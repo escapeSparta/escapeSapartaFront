@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import SignUp from './components/SignUp.vue';
+import SignUp from './components/signup/SignUp.vue';
 import Header from "./components/Header.vue";
 
 export default {
