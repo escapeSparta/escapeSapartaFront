@@ -11,7 +11,12 @@ import FollowInfo from "@/components/mypage/FollowInfo.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
 import Reservation from "@/views/Reservation.vue";
-import Theme from "@/views/Theme.vue";
+// import Theme from "@/views/Theme.vue";
+import bookingInfo from '@/components/payment/BookingInfo.vue'
+
+import paySuccess from './components/payment/Home.vue';
+import payCancel from './components/payment/Cancel.vue';
+import payFail from './components/payment/Fail.vue';
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -55,10 +60,10 @@ export const router = createRouter({
             path: "/reservation",
             component: Reservation
         },
-        {
-            path: "/theme",
-            component: Theme
-        },
+        // {
+        //     path: "/theme",
+        //     component: Theme
+        // },
         {
             path: "/login",
             component: Login
@@ -78,7 +83,31 @@ export const router = createRouter({
             name: 'Theme',
             component: MainTheme,
             props: true
+        },
+        {
+            path: '/booking-info',
+            name: 'BookingInfo',
+            component: bookingInfo,
+            props: (route) => ({ booking: route.query.booking })
+        },
+
+        //결제화면
+        {
+            path: '/pay-success',
+            name: 'paySuccess',
+            component: paySuccess
+        },
+        {
+            path: '/pay-cancel',
+            name: 'payCancel',
+            component: payCancel
+        },
+        {
+            path: '/pay-fail',
+            name: 'payFail',
+            component: payFail
         }
+        //===========================
 
     ]
 })

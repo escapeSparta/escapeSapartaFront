@@ -12,12 +12,13 @@
 <script>
 import BookingInfo from '../components/payment/BookingInfo.vue';
 import BookingForm from '../components/payment/BookingForm.vue';
-import axios from 'axios';
+import TestReservationInfo from '../components/payment/testReservationInfo.vue';
 
 export default {
   components: {
     BookingInfo,
-    BookingForm
+    BookingForm,
+    // TestReservationInfo
   },
   data() {
     return {
@@ -25,13 +26,7 @@ export default {
     };
   },
   created() {
-    axios.get('https://localhost:8082/manager/stores/theme/1') // 임의로 ID 1번 예약 정보 가져옴
-      .then(response => {
-        this.reservation = response.data;
-      })
-      .catch(error => {
-        console.error('Error fetching reservation:', error);
-      });
+
   }
 };
 </script>
