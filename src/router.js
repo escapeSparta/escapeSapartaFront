@@ -4,6 +4,9 @@ import Home from "./views/Home.vue";
 import About from "./views/About.vue";
 import SignUp from './components/SignUp.vue';
 import MyPage from "@/views/MyPage.vue";
+import UserInfo from "@/components/mypage/UserInfo.vue"
+import ReservationInfo from "@/components/mypage/ReservationInfo.vue";
+import FollowInfo from "@/components/mypage/FollowInfo.vue";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -21,7 +24,26 @@ export const router = createRouter({
         },
         {
             path: "/profile",
-            component: MyPage
+            component: MyPage,
+            children: [
+                {
+                    path: '',
+                    component: UserInfo
+                },
+                {
+                    path: 'reservations',
+                    component: ReservationInfo
+                },
+                {
+                    path: 'follow',
+                    component: FollowInfo
+                },
+                // {
+                //     path: 'edit',
+                //     name: 'EditProfile',
+                //     component: EditProfile
+                // }
+            ]
         }
 
     ]

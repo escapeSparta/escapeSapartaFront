@@ -3,7 +3,7 @@
 <template>
   <div id="app">
     <Header />
-    <div id="content" class="content">
+    <div id="content-main" class="content">
       <router-view/>
     </div>
 <!--    <SignUp />-->
@@ -48,7 +48,7 @@ a,
   }
 }
 
-#content {
+#content-main {
   padding: 5rem; /* 헤더의 고정 높이만큼 패딩 추가 */
 }
 
