@@ -30,8 +30,6 @@ export default {
     };
   },
   methods: {
-    point: undefined, createAt: undefined,
-
     async createAccount() {
       try {
         const response = await axios.post('/users/signup', {
@@ -39,7 +37,7 @@ export default {
           email: this.email,
           password: this.password,
           certificateCode: this.certificateCode,
-          adminKey : this.adminKey
+          adminKey: this.adminKey
         });
         console.log('Account creation response:', response);
         alert('Account created successfully.');

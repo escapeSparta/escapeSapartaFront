@@ -2,8 +2,9 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "./views/Home.vue";
 import About from "./views/About.vue";
-import SignUp from './components/SignUp.vue';
+import SignUp from './components/signup/SignUp.vue';
 import MyPage from "@/views/MyPage.vue";
+import Login from "@/components/login/Login.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
 
@@ -24,6 +25,11 @@ export const router = createRouter({
         {
             path: "/profile",
             component: MyPage
+        },
+
+        {
+            path: "/login",
+            component: Login
         },
         {
             path:"/main-theme",
