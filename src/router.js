@@ -10,14 +10,15 @@ import ReservationInfo from "@/components/mypage/ReservationInfo.vue";
 import FollowInfo from "@/components/mypage/FollowInfo.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
+import ReviewList from '@/components/review/ReviewList.vue'
 
 export const router = createRouter({
     history: createWebHistory(),
     routes: [{
-            path: "/",
-            name: "Home",
-            component: Home
-        },
+        path: "/",
+        name: "Home",
+        component: Home
+    },
         {
             path: "/signup",
             component: SignUp
@@ -63,13 +64,18 @@ export const router = createRouter({
             component: SearchStore
         },
 
-      //전체 테마 조회 페이지 나중에 위치 수정 필요
+        //전체 테마 조회 페이지 나중에 위치 수정 필요
         {
             path:"/store/storeId",
             name: 'Theme',
             component: MainTheme,
             props: true
-        }
+        },
+
+        {
+            path: '/search/reviews',
+            name: 'ReviewList',
+            component: ReviewList }
 
     ]
 })
