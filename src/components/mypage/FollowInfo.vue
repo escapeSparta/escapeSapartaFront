@@ -73,7 +73,6 @@
 
 <script>
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:8082';
 
 export default {
   name: 'FollowInfo',

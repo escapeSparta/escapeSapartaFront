@@ -16,6 +16,7 @@
 
 <script>
 import axios from 'axios'
+import {axiosCoreInstance} from "@/axios.js";
 
 export default {
   data() {
@@ -30,13 +31,24 @@ export default {
 
     async login() {
       try {
-        const response = await axios('/users/login', {
+        const response = await axios.post('http://localhost:8080/users/login', {
           email: this.email,
           password: this.password
         })
         console.log('Login response:', response)
         alert('Logged in successfully.')
         // 여기에 로그인 성공 후 처리 로직을 추가하세요 (예: 토큰 저장, 리다이렉트 등)
+
+        console.log('Response headers:', response.headers);
+
+        const accessToken = response.headers['authorization']; // 헤더 이름을 소문자로 접근
+        const refreshToken = response.headers['refreshtoken']; // 헤더 이름을 소문자로 접근
+        console.log(accessToken);
+
+        // localStorage.setItem('Authorization', accessToken);
+        // localStorage.setItem('RefreshToken', refreshToken);
+        this.moveMain();
+
       } catch (error) {
         console.error('Error logging in:', error)
         alert('Failed to log in. Please try again.')
@@ -45,6 +57,9 @@ export default {
     socialLogin(platform) {
       console.log(`Login with ${platform}`)
       window.location.href = `https://escapesparta.net/oauth2/authorization/${platform}`
+    },
+    moveMain(){
+      this.$router.push({name: 'Home'});
     }
   }
 }
