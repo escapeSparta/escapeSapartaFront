@@ -5,6 +5,8 @@ import About from "./views/About.vue";
 import SignUp from './components/signup/SignUp.vue';
 import MyPage from "@/views/MyPage.vue";
 import Login from "@/components/login/Login.vue";
+import Reservation from "@/views/Reservation.vue";
+import Theme from "@/views/Theme.vue";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -24,7 +26,14 @@ export const router = createRouter({
             path: "/profile",
             component: MyPage
         },
-
+        {
+            path: "/reservation",
+            component: Reservation
+        },
+        {
+            path: "/theme",
+            component: Theme
+        },
         {
             path: "/login",
             component: Login
