@@ -2,9 +2,7 @@
   <div class="container">
     <ProfileMenu />
     <div class="profile-content">
-      <h1>프로필</h1>
-      <UserInfo />
-      <button class="edit-profile-btn" @click="editProfile">프로필 수정</button>
+      <router-view />
     </div>
   </div>
 </template>
@@ -37,16 +35,12 @@ export default {
   margin: 0 auto;
 }
 
-.profile-menu {
-  width: 200px;
-  margin-right: 2rem;
-}
-
 .profile-content {
   flex-grow: 1;
   background-color: rgba(0, 255, 0, 0.1);
   border-radius: 10px;
   padding: 2rem;
+  margin-left: 2rem;
 }
 
 .edit-profile-btn {

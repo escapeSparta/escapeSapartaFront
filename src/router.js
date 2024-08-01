@@ -5,6 +5,9 @@ import About from "./views/About.vue";
 import SignUp from './components/signup/SignUp.vue';
 import MyPage from "@/views/MyPage.vue";
 import Login from "@/components/login/Login.vue";
+import UserInfo from "@/components/mypage/UserInfo.vue"
+import ReservationInfo from "@/components/mypage/ReservationInfo.vue";
+import FollowInfo from "@/components/mypage/FollowInfo.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
 
@@ -12,6 +15,7 @@ export const router = createRouter({
     history: createWebHistory(),
     routes: [{
             path: "/",
+            name: "Home",
             component: Home
         },
         {
@@ -24,7 +28,26 @@ export const router = createRouter({
         },
         {
             path: "/profile",
-            component: MyPage
+            component: MyPage,
+            children: [
+                {
+                    path: '',
+                    component: UserInfo
+                },
+                {
+                    path: 'reservations',
+                    component: ReservationInfo
+                },
+                {
+                    path: 'follow',
+                    component: FollowInfo
+                },
+                // {
+                //     path: 'edit',
+                //     name: 'EditProfile',
+                //     component: EditProfile
+                // }
+            ]
         },
 
         {
