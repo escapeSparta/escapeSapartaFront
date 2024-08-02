@@ -11,20 +11,21 @@ import FollowInfo from "@/components/mypage/FollowInfo.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
 import Reservation from "@/views/Reservation.vue";
-// import Theme from "@/views/Theme.vue";
 import bookingInfo from '@/components/payment/BookingInfo.vue'
 
 import paySuccess from './components/payment/Home.vue';
 import payCancel from './components/payment/Cancel.vue';
 import payFail from './components/payment/Fail.vue';
+import ReviewList from '@/components/review/ReviewList.vue'
+import ThemeInfo from '@/components/ThemeInfo.vue'
 
 export const router = createRouter({
     history: createWebHistory(),
     routes: [{
-            path: "/",
-            name: "Home",
-            component: Home
-        },
+        path: "/",
+        name: "Home",
+        component: Home
+    },
         {
             path: "/signup",
             component: SignUp
@@ -77,12 +78,18 @@ export const router = createRouter({
             component: SearchStore
         },
 
-      //전체 테마 조회 페이지 나중에 위치 수정 필요
+        //전체 테마 조회 페이지 나중에 위치 수정 필요
         {
-            path:"/store/storeId",
+            path:'/store/:storeId',
             name: 'Theme',
-            component: MainTheme,
+            component: ThemeInfo,
             props: true
+        },
+
+        {
+            path: '/search/reviews',
+            name: 'ReviewList',
+            component: ReviewList
         },
         {
             path: '/booking-info',

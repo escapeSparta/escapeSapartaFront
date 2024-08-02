@@ -1,70 +1,16 @@
 <template>
   <div class="content">
     <h1>팔로우한 지점</h1>
+    <p>팔로우한 지점 수: {{ stores.length }}개</p>
     <div class="grid">
-      <div class="card">
-        <img src="https://websim.ai/neon-store-corner.jpg" alt="Neon lit store corner at night" width="100%" height="150">
-        <h3>강남점</h3>
-        <p>주소: 서울특별시 강남구 테헤란로 123</p>
-        <p>전화: 02-1234-5678</p>
+      <div v-for="store in stores" :key="store.storeId" class="card">
+        <img :src="store.storeImage ? store.storeImage : 'https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Neon lit store corner at night" width="100%" height="150">
+        <h3>{{ store.name }}</h3>
+        <p>{{ store.address }}</p>
+        <p>전화: {{ store.phoneNumber }}</p>
         <div class="button-group">
           <button class="button">예약하기</button>
-          <button class="button">팔로우 취소</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://websim.ai/crowded-city-street-night.jpg" alt="Crowded city street at night with bright neon signs" width="100%" height="150">
-        <h3>홍대점</h3>
-        <p>주소: 서울특별시 마포구 홍대로 456</p>
-        <p>전화: 02-9876-5432</p>
-        <div class="button-group">
-          <button class="button">예약하기</button>
-          <button class="button">상세보기</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://websim.ai/busy-night-street-crowd.jpg" alt="Busy night street with large crowd and neon signs" width="100%" height="150">
-        <h3>종로점</h3>
-        <p>주소: 서울특별시 종로구 인사동길 789</p>
-        <p>전화: 02-2468-1357</p>
-        <div class="button-group">
-          <button class="button">예약하기</button>
-          <button class="button">상세보기</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://websim.ai/neon-lit-alley.jpg" alt="Neon lit alley with traditional Korean architecture" width="100%" height="150">
-        <h3>인사동점</h3>
-        <p>주소: 서울특별시 종로구 인사동길 101</p>
-        <p>전화: 02-3691-2468</p>
-        <div class="button-group">
-          <button class="button">예약하기</button>
-          <button class="button">상세보기</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://websim.ai/modern-cafe-interior.jpg" alt="Modern cafe interior with neon accents" width="100%" height="150">
-        <h3>이태원점</h3>
-        <p>주소: 서울특별시 용산구 이태원로 202</p>
-        <p>전화: 02-7531-9514</p>
-        <div class="button-group">
-          <button class="button">예약하기</button>
-          <button class="button">상세보기</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://websim.ai/riverside-night-view.jpg" alt="Riverside night view with neon reflections" width="100%" height="150">
-        <h3>여의도점</h3>
-        <p>주소: 서울특별시 영등포구 여의대로 303</p>
-        <p>전화: 02-1597-5328</p>
-        <div class="button-group">
-          <button class="button">예약하기</button>
-          <button class="button">상세보기</button>
+          <button class="button" id="unfollow-button" @click="unfollowStore(store.storeId)">팔로우 취소</button>
         </div>
       </div>
     </div>
@@ -73,32 +19,52 @@
 
 <script>
 import axios from 'axios';
+import {axiosConsumer} from "@/axios.js";
 
 export default {
   name: 'FollowInfo',
   data() {
     return {
-      name: '',
-      address: '',
-      phoneNumber: '',
-      storeImage: ''
+      stores: []
     }
   },
+  async created() { // 컴포넌트가 생성된 후 호출
+    await this.fetchFollowStores();
+  },
   methods: {
-    async followInfo() {
+    async fetchFollowStores() {
       try {
-        const response = await axios.get('/follow/stores');
-        const userData = response.data.data;
-        this.user = {
-          avatar: userData.avatar || '', // avatar 데이터가 있을 경우 사용
-          name: userData.name,
-          email: userData.email,
-          phone: userData.phone,
-          joinDate: userData.createdAt,
-          points: userData.point
-        };
+        const response = await axiosConsumer.get('/follow/stores');
+        this.stores = response.data.data;
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error fetching follow Stores:', error);
+      }
+    },
+    async unfollowStore(id) {
+      console.log(id);
+      // 사용자에게 확인 팝업을 표시합니다.
+      const isConfirmed = confirm(`팔로우를 취소하시겠습니까?`);
+
+      // 사용자가 확인을 클릭한 경우에만 API를 호출합니다.
+      if (isConfirmed) {
+        try {
+          // 예약 취소 API 호출
+          const response = await axiosConsumer.delete(`/follow/stores/${id}`);
+
+          // 예약 목록을 업데이트합니다. (예: 취소된 예약을 제외한 예약 목록으로 업데이트)
+          this.reservations = response.data.data;
+
+          // 취소 완료 알림
+          alert(`팔로우 취소 완료!`);
+          await this.fetchFollowStores();
+        } catch (error) {
+          console.error('Error cancelling follow:', error);
+          // 에러 발생 시 사용자에게 알림
+          alert('팔로우 취소 중 오류가 발생했습니다.');
+        }
+      } else {
+        // 사용자가 취소를 클릭했을 때의 처리를 할 수 있습니다. (필요시)
+        console.log('팔로우 취소가 취소되었습니다.');
       }
     }
   }
@@ -133,9 +99,9 @@ export default {
 }
 
 .button {
-  background-color: #0f0;
-  border: none;
-  color: black;
+  background-color: transparent;
+  color: #0f0; /* 리뷰 버튼 색상 */
+  border: 1px solid #0f0;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
@@ -148,8 +114,7 @@ export default {
 }
 
 .button:hover {
-  background-color: white;
-  color: white;
-  border: 2px solid #4CAF50;
+  background-color: #0f0;
+  color: #000;
 }
 </style>
