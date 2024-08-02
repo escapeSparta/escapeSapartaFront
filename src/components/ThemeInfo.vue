@@ -239,7 +239,8 @@ export default {
           price: price,
           paymentStatus: 'PENDING'
         })
-        this.$router.push({name: 'BookingInfo', params: {response: response}});
+        console.log(response.data.data.totalPrice);
+        this.$router.push({name: 'BookingInfo', params: {response: response.data.data}});
         // alert(`예약이 완료되었습니다!\n테마: ${this.selectedTheme.title}\n날짜: ${this.formattedDate}\n시간: ${this.selectedTime}\n인원: ${this.player}인`);
       }catch(error){
         console.log(error);
