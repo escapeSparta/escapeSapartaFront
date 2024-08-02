@@ -1,16 +1,18 @@
 <template>
-  <div class="container">
-    <h1>EscapeSparta Login</h1>
-    <input type="email" v-model="email" placeholder="Enter your email" required />
-    <input type="password" v-model="password" placeholder="Enter your password" required />
-    <button type="button" @click="loginUser">Login</button>
-    <p>Or login with:</p>
-    <div class="social-buttons">
-      <button @click="socialLogin('Google')">Google</button>
-      <button @click="socialLogin('Kakao')">Kakao</button>
-      <button @click="socialLogin('Naver')">Naver</button>
+  <div id="app">
+    <div class="container">
+      <h1>EscapeSparta Login</h1>
+      <input type="email" v-model="email" placeholder="Enter your email" required />
+      <input type="password" v-model="password" placeholder="Enter your password" required />
+      <button type="button" @click="loginUser">Login</button>
+      <p>Or login with:</p>
+      <div class="social-buttons">
+        <button @click="socialLogin('Google')">Google</button>
+        <button @click="socialLogin('Kakao')">Kakao</button>
+        <button @click="socialLogin('Naver')">Naver</button>
+      </div>
+      <router-link to="/" class="back-link">Back to Home</router-link>
     </div>
-    <router-link to="/" class="back-link">Back to Home</router-link>
   </div>
 </template>
 
@@ -48,14 +50,11 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: #000000;
+#app {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
-  font-family: Arial, sans-serif;
+  background-color: #000000;
 }
 
 .container {

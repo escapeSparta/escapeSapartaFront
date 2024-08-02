@@ -37,8 +37,16 @@ export default {
       const token = localStorage.getItem('accessToken');
       console.log(!!token);
       return !!token; // token이 null, undefined, 빈 문자열이 아니면 true 반환
+    }},
+    created() {
+    if (this.hasAccessToken()) {
+      this.$store.commit('auth/SET_LOGIN_STATE', {
+        isLoggedIn: true,
+        accessToken: localStorage.getItem('accessToken'),
+        refreshToken: localStorage.getItem('refreshToken')
+      });
     }
-  },
+  }
 };
 </script>
 
