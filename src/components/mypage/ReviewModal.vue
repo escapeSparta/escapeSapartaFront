@@ -69,7 +69,7 @@ export default {
       // 실제 리뷰 제출 로직을 여기에 추가
       try {
         // 예약 취소 API 호출
-        const response = await axiosConsumerRequest({
+        const response = await this.axiosConsumerRequest({
           method: 'post',
           url: '/reviews',
           data: {

@@ -104,7 +104,7 @@ export default {
         try {
           await this.axiosReservationRequest({
             method: 'delete',
-            url: '/reservations/${id}'
+            url: `/reservations/${id}`
           })
           alert(`예약이(가) 취소되었습니다.`);
           await this.fetchReservations();
