@@ -1,92 +1,30 @@
 <template>
   <div class="reservations">
     <h1>예약 확인</h1>
+    <p>총 예약 건수: {{ reservations.length }}건</p>
     <div class="reservation-list">
-      <div class="reservation-item">
-<!--      <div v-for="reservation in reservations" :key="reservation.id" class="reservation-item">-->
-        <img src="https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png" alt="Store image" class="reservation-image" />
+      <div v-for="reservation in reservations" :key="reservation.reservationId" class="reservation-item">
+        <img :src="reservation.storeImage ? reservation.storeImage : 'https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Store image" class="reservation-image" />
         <div class="reservation-details">
-<!--          <h3>{{ reservation.themeName }}</h3>-->
-<!--          <p><strong>예약일:</strong> {{ reservation.bookingDate }}</p>-->
-<!--          <p><strong>방탈출 카페:</strong> {{ reservation.escapeCafeName }}</p>-->
-<!--          <p><strong>인원:</strong> {{ reservation.personCount }}인</p>-->
-<!--          <p><strong>가격:</strong> {{ reservation.price }} 원</p>-->
-<!--          <p><strong>예약 상태:</strong> {{ reservation.status }}</p>-->
-          <h3>시간이 간다</h3>
-          <p><strong>예약일:</strong> 2024.03.24</p>
-          <p><strong>방탈출 카페:</strong> 방탈출 카페 루나 강남점</p>
-          <p><strong>인원:</strong> 4인</p>
-          <p><strong>가격:</strong> 100000원</p>
-          <p><strong>예약 상태:</strong> 예약 완료</p>
+          <h3>{{ reservation.themeTitle }}</h3>
+          <p><strong>예약일:</strong> {{ formatDate(reservation.startTime) }}</p>
+          <p><strong>방탈출 카페:</strong> {{ reservation.storeName }}</p>
+          <p><strong>인원:</strong> {{ reservation.player }}인</p>
+          <p><strong>가격:</strong> {{ reservation.price }} 원</p>
+          <p><strong>예약 상태:</strong> {{ getReservationStatusText(reservation.reservationStatus) }}</p>
         </div>
         <div class="reservation-actions">
-<!--          <button-->
-<!--              v-if="isPastDate(reservation.bookingDate) && reservation.status !== 'Completed'"-->
-<!--              class="button review-button"-->
-<!--              @click="writeReview(reservation.id)"-->
-<!--          >-->
-<!--            리뷰 쓰기-->
-<!--          </button>-->
-<!--          <button-->
-<!--              v-else-->
-<!--              class="button cancel-button"-->
-<!--              @click="cancelReservation(reservation.id)"-->
-<!--          >-->
-<!--            예약 취소-->
-<!--          </button>-->
           <button
-
+              v-if="isPastDate(reservation.startTime) && !isDeactive(reservation.reservationStatus)"
               class="button review-button"
-
+              @click="openReviewModal(reservation.reservationId, reservation.storeName, reservation.themeTitle)"
           >
             리뷰 쓰기
           </button>
           <button
+              v-if="!isPastDate(reservation.startTime) && !isDeactive(reservation.reservationStatus)"
               class="button cancel-button"
-          >
-            예약 취소
-          </button>
-        </div>
-      </div>
-      <div class="reservation-item">
-        <!--      <div v-for="reservation in reservations" :key="reservation.id" class="reservation-item">-->
-        <img src="https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png" alt="Store image" class="reservation-image" />
-        <div class="reservation-details">
-          <!--          <h3>{{ reservation.themeName }}</h3>-->
-          <!--          <p><strong>예약일:</strong> {{ reservation.bookingDate }}</p>-->
-          <!--          <p><strong>방탈출 카페:</strong> {{ reservation.escapeCafeName }}</p>-->
-          <!--          <p><strong>인원:</strong> {{ reservation.personCount }}인</p>-->
-          <!--          <p><strong>가격:</strong> {{ reservation.price }} 원</p>-->
-          <!--          <p><strong>예약 상태:</strong> {{ reservation.status }}</p>-->
-          <h3 id="themeName">시간이 간다</h3>
-          <p><strong>예약일:</strong> 2024.03.24</p>
-          <p><strong>방탈출 카페:</strong> <span id="cafeName">방탈출 카페 루나 강남점</span></p>
-          <p><strong>인원:</strong> 4인</p>
-          <p><strong>가격:</strong> 100000원</p>
-          <p><strong>예약 상태:</strong> 예약 완료</p>
-        </div>
-        <div class="reservation-actions">
-          <!--          <button-->
-          <!--              v-if="isPastDate(reservation.bookingDate) && reservation.status !== 'Completed'"-->
-          <!--              class="button review-button"-->
-          <!--              @click="writeReview(reservation.id)"-->
-          <!--          >-->
-          <!--            리뷰 쓰기-->
-          <!--          </button>-->
-          <!--          <button-->
-          <!--              v-else-->
-          <!--              class="button cancel-button"-->
-          <!--              @click="cancelReservation(reservation.id)"-->
-          <!--          >-->
-          <!--            예약 취소-->
-          <!--          </button>-->
-          <button
-              class="button review-button"
-            @click="openReviewModal()"
-          >
-            리뷰 쓰기</button>
-          <button
-              class="button cancel-button"
+              @click="cancelReservation(reservation.reservationId)"
           >
             예약 취소
           </button>
@@ -96,18 +34,16 @@
   </div>
   <ReviewModal
       :isVisible="isModalVisible"
+      :reservationId="selectedReservationId"
+      :storeName="selectedStoreName"
+      :themeName="selectedThemeName"
       @close="closeReviewModal"
   />
-<!--  <ReviewModal-->
-<!--      :isVisible="isModalVisible"-->
-<!--      :escapeCafeName="selectedEscapeCafeName"-->
-<!--      :themeName="selectedThemeName"-->
-<!--      @close="closeReviewModal"-->
-<!--  />-->
 </template>
 
 <script>
 import axios from 'axios';
+import {axiosReservation} from "@/axios.js";
 import ReviewModal from "@/components/mypage/ReviewModal.vue";
 
 export default {
@@ -118,17 +54,20 @@ export default {
   data() { // 컴포넌트의 초기 데이터 상태 정의
     return {
       isModalVisible: false,
+      selectedStoreName: '',
+      selectedThemeName: '',
+      selectedReservationId: 0,
       reservations: [], // 예약 내역 배열
     };
   },
-  // async created() { // 컴포넌트가 생성된 후 호출
-  //   await this.fetchReservations();
-  // },
+  async created() { // 컴포넌트가 생성된 후 호출
+    await this.fetchReservations();
+  },
   methods: { // 컴포넌트의 메서드 정의
     async fetchReservations() {
       try {
-        const response = await axios.get('/reservations'); // 예약 내역을 가져오는 API 호출
-        this.reservations = response.data; // API 응답 데이터
+        const response = await axiosReservation.get('/reservations'); // 예약 내역을 가져오는 API 호출
+        this.reservations = response.data.data; // API 응답 데이터
       } catch (error) {
         console.error('Error fetching reservations:', error);
       }
@@ -138,28 +77,59 @@ export default {
       const reservationDate = new Date(date);
       return reservationDate < today;
     },
-    cancelReservation(id) {
-      // 예약 취소 로직
-      alert(`예약 ${id}이(가) 취소되었습니다.`);
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
-    writeReview(id) {
-      // 리뷰 작성 로직
-      alert(`리뷰 작성 페이지로 이동합니다.`);
+    getReservationStatusText(status) {
+      if (status === 'ACTIVE') {
+        return '예약 완료';
+      } else if (status === 'DEACTIVE') {
+        return '예약 취소';
+      } else {
+        return '알 수 없는 상태';
+      }
     },
-    openReviewModal() {
-      // this.selectedEscapeCafeName = cafeName;
-      // this.selectedThemeName = themeName;
+    async cancelReservation(id) {
+      // 사용자에게 확인 팝업을 표시합니다.
+      const isConfirmed = confirm(`정말로 예약을 취소하시겠습니까?`);
+
+      // 사용자가 확인을 클릭한 경우에만 API를 호출합니다.
+      if (isConfirmed) {
+        try {
+          // 예약 취소 API 호출
+          const response = await axiosReservation.delete(`/reservations/${id}`);
+
+          // 예약 목록을 업데이트합니다. (예: 취소된 예약을 제외한 예약 목록으로 업데이트)
+          this.reservations = response.data.data;
+
+          // 취소 완료 알림
+          alert(`예약이(가) 취소되었습니다.`);
+          await this.fetchReservations();
+        } catch (error) {
+          console.error('Error cancelling reservation:', error);
+          // 에러 발생 시 사용자에게 알림
+          alert('예약 취소 중 오류가 발생했습니다.');
+        }
+      } else {
+        // 사용자가 취소를 클릭했을 때의 처리를 할 수 있습니다. (필요시)
+        console.log('예약 취소가 취소되었습니다.');
+      }
+    },
+    isDeactive(status) {
+      return status === 'DEACTIVE';
+    },
+    openReviewModal(id, storeName, themeName) {
+      this.selectedReservationId = id;
+      this.selectedStoreName = storeName;
+      this.selectedThemeName = themeName;
       this.isModalVisible = true;
-
-
     },
-    // openReviewModal(cafeName, themeName) {
-    //   // this.selectedEscapeCafeName = cafeName;
-    //   // this.selectedThemeName = themeName;
-    //   this.isModalVisible = true;
-    //
-    //
-    // },
     closeReviewModal() {
       this.isModalVisible = false;
     }
@@ -172,8 +142,7 @@ export default {
 }
 
 .reservation-list {
-  max-height: 80vh; /* 스크롤을 위해 최대 높이 설정 */
-  overflow-y: auto; /* 세로 스크롤 활성화 */
+  padding-left: 15px; /* 왼쪽 패딩 추가 */
 }
 
 .reservation-item {
@@ -218,7 +187,7 @@ export default {
 }
 
 .review-button {
-  background-color: black;
+  background-color: transparent;
   color: #0f0; /* 리뷰 버튼 색상 */
   border: 1px solid #0f0;
 }
