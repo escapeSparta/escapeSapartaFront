@@ -227,6 +227,7 @@ export default {
       this.price = selectedPrice * player;
     },
     async book(themeTimeId, player, price) {
+
       if (!this.selectedTheme || !this.selectedDate || !this.selectedTime || !this.player) {
         alert('테마, 날짜, 시간, 인원을 모두 선택해주세요.');
         return;
@@ -240,12 +241,20 @@ export default {
           paymentStatus: 'PENDING'
         })
         console.log(response.data.data.totalPrice);
-        this.$router.push({name: 'BookingInfo', params: {response: response.data.data}});
+        // this.$router.push({name: 'Reservation', params: {response: response.data.data}});
+        // 화면전환 코드
+        this.$router.push({
+          name: 'BookingInfo',
+          params: {
+            response: response.data.data
+          }
+        });
         // alert(`예약이 완료되었습니다!\n테마: ${this.selectedTheme.title}\n날짜: ${this.formattedDate}\n시간: ${this.selectedTime}\n인원: ${this.player}인`);
       }catch(error){
         console.log(error);
         alert(error);
       }
+
     },
 
   }

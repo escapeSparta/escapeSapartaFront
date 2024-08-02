@@ -12,6 +12,7 @@ import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
 import Reservation from "@/views/Reservation.vue";
 import bookingInfo from '@/components/payment/BookingInfo.vue'
+import bookingForm from '@/components/payment/BookingForm.vue'
 
 import paySuccess from './components/payment/Home.vue';
 import payCancel from './components/payment/Cancel.vue';
@@ -58,8 +59,10 @@ export const router = createRouter({
             ]
         },
         {
-            path: "/reservation",
-            component: Reservation
+            path: '/reservation',
+            name: 'Reservation',
+            component: Reservation,
+            props: true
         },
         // {
         //     path: "/theme",
@@ -95,7 +98,13 @@ export const router = createRouter({
             path: '/booking-info',
             name: 'BookingInfo',
             component: bookingInfo,
-            props: (route) => ({ booking: route.query.booking })
+            props: route => ({ response: route.params.response })
+        },
+        {
+            path: '/booking-form',
+            name: 'BookingForm',
+            component: bookingForm,
+            props: route => ({ response: route.params.response })
         },
 
         //결제화면

@@ -2,31 +2,44 @@
   <div>
     <main>
       <div class="booking-box">
-        <BookingInfo />
-        <BookingForm />
+        <BookingForm :response="response" />
+        <BookingInfo :response="response" />
       </div>
     </main>
   </div>
 </template>
 
 <script>
-import BookingInfo from '../components/payment/BookingInfo.vue';
-import BookingForm from '../components/payment/BookingForm.vue';
-import TestReservationInfo from '../components/payment/testReservationInfo.vue';
+// import BookingInfo from '../components/payment/BookingInfo.vue';
+// import BookingForm from '../components/payment/BookingForm.vue';
 
 export default {
   components: {
-    BookingInfo,
     BookingForm,
-    // TestReservationInfo
+    BookingInfo
+  },
+  props: {
+    response: {
+      type: Object,
+      required: false,
+      default: () => ({
+        storeName: '',
+        storeAddress: '',
+        themeTitle: '',
+        level: '',
+        startTime: '',
+        player: '',
+        duration: '',
+        themeImage: '',
+        createAt: '',
+        totalPrice: ''
+      })
+    }
   },
   data() {
     return {
-      reservation: {}
+      bookingData: this.response
     };
-  },
-  created() {
-
   }
 };
 </script>
