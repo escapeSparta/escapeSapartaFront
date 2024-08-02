@@ -11,6 +11,7 @@ import FollowInfo from "@/components/mypage/FollowInfo.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
 import ReviewList from '@/components/review/ReviewList.vue'
+import ThemeInfo from '@/components/ThemeInfo.vue'
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -66,9 +67,9 @@ export const router = createRouter({
 
         //전체 테마 조회 페이지 나중에 위치 수정 필요
         {
-            path:"/store/storeId",
+            path:'/store/:storeId',
             name: 'Theme',
-            component: MainTheme,
+            component: ThemeInfo,
             props: true
         },
 

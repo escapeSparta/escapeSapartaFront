@@ -1,0 +1,224 @@
+<html><head><base href="https://escapesparta.net/room/haunted-hospital"><meta charset="UTF-8">
+<title>EscapeSparta - Haunted Hospital Booking</title>
+<style>
+body {
+  background-color: #000;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+header {
+  background-color: #001100;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+.user-actions a {
+  color: #0f0;
+  text-decoration: none;
+  margin-left: 15px;
+}
+.user-icon {
+  font-size: 20px;
+}
+main {
+  flex-grow: 1;
+  padding: 50px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.left-column, .right-column {
+  width: 45%;
+  max-width: 600px;
+}
+.booking-info, .booking-form {
+  background-color: #001100;
+  border: 1px solid #0f0;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+h1, h2 {
+  color: #0f0;
+  text-shadow: 0 0 10px #0f0;
+}
+p {
+  line-height: 1.6;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  margin-top: 10px;
+}
+select, input[type="text"], input[type="tel"], input[type="email"], input[type="number"] {
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #001100;
+  border: 1px solid #0f0;
+  color: #0f0;
+}
+button[type="submit"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #0f0;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+button[type="submit"]:hover {
+  background-color: #00ff00;
+}
+.payment-methods {
+  margin-top: 20px;
+}
+.payment-method {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.payment-method input[type="radio"] {
+  margin-right: 10px;
+}
+#total-price {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 20px;
+}
+.booking-info {
+  background-color: #002200;
+}
+.booking-info h2 {
+  margin-top: 0;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">EscapeSparta</div>
+  <div class="user-actions">
+    <a href="https://escapesparta.net/profile" class="user-icon">👤</a>
+    <a href="https://escapesparta.net/login">Login</a>
+    <a href="https://escapesparta.net/signup">Sign Up</a>
+  </div>
+</header>
+
+<main>
+  <div class="left-column">
+    <div class="booking-info">
+      <h2>Selected Booking</h2>
+      <p><strong>Theme:</strong> Haunted Hospital</p>
+      <p><strong>Date:</strong> <span id="selected-date">July 15, 2023</span></p>
+      <p><strong>Time:</strong> <span id="selected-time">19:00</span></p>
+      <p><strong>Location:</strong> Seoul, Gangnam</p>
+      <p><strong>Duration:</strong> 60 minutes</p>
+      <p><strong>Players:</strong> 2-6</p>
+    </div>
+  </div>
+
+  <div class="right-column">
+    <div class="booking-form">
+      <h2>Complete Your Booking</h2>
+      <form id="booking-form">
+        <label for="players">Number of Players:</label>
+        <select id="players" name="players" required>
+          <option value="">Select number of players</option>
+          <option value="2">2 Players</option>
+          <option value="3">3 Players</option>
+          <option value="4">4 Players</option>
+          <option value="5">5 Players</option>
+          <option value="6">6 Players</option>
+        </select>
+
+        <div id="total-price">Total Price: ₩0</div>
+
+        <div class="payment-methods">
+          <h3>Payment Method:</h3>
+          <div class="payment-method">
+            <input type="radio" id="toss-pay" name="payment" value="toss-pay" required>
+            <label for="toss-pay">Toss Pay</label>
+          </div>
+          <div class="payment-method">
+            <input type="radio" id="kakao-pay" name="payment" value="kakao-pay">
+            <label for="kakao-pay">Kakao Pay</label>
+          </div>
+          <div class="payment-method">
+            <input type="radio" id="naver-pay" name="payment" value="naver-pay">
+            <label for="naver-pay">Naver Pay</label>
+          </div>
+        </div>
+
+        <button type="submit">Proceed to Payment</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script>
+const pricePerPerson = 25000; // Price in KRW
+
+document.getElementById('players').addEventListener('change', function() {
+  const players = parseInt(this.value);
+  const totalPrice = players * pricePerPerson;
+  document.getElementById('total-price').textContent = `Total Price: ₩${totalPrice.toLocaleString()}`;
+});
+
+document.getElementById('booking-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const bookingDetails = Object.fromEntries(formData.entries());
+  
+  if (!bookingDetails.players) {
+    alert('Please select the number of players.');
+    return;
+  }
+
+  if (!bookingDetails.payment) {
+    alert('Please select a payment method.');
+    return;
+  }
+
+  const totalPrice = parseInt(bookingDetails.players) * pricePerPerson;
+  const selectedDate = document.getElementById('selected-date').textContent;
+  const selectedTime = document.getElementById('selected-time').textContent;
+  
+  let paymentMethod;
+  switch(bookingDetails.payment) {
+    case 'toss-pay':
+      paymentMethod = 'Toss Pay';
+      break;
+    case 'kakao-pay':
+      paymentMethod = 'Kakao Pay';
+      break;
+    case 'naver-pay':
+      paymentMethod = 'Naver Pay';
+      break;
+  }
+  
+  alert(`Proceeding to payment for Haunted Hospital:
+Date: ${selectedDate}
+Time: ${selectedTime}
+Players: ${bookingDetails.players}
+Total Price: ₩${totalPrice.toLocaleString()}
+Payment Method: ${paymentMethod}
+
+You will now be redirected to the ${paymentMethod} gateway.`);
+  
+  console.log('Booking details:', bookingDetails);
+  // Here you would typically redirect to the selected payment gateway or process the payment
+});
+
+</script>
+
+</body></html>
