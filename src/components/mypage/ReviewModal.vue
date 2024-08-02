@@ -2,63 +2,89 @@
   <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <h1>리뷰 작성</h1>
-      <p><strong>방탈출 카페:</strong> 루나 강남점</p>
-      <p><strong>테마:</strong> 테마 이름</p>
-<!--      <p><strong>방탈출 카페:</strong> {{ escapeCafeName }}</p>-->
-<!--      <p><strong>테마:</strong> {{ themeName }}</p>-->
+      <p><strong>방탈출 카페:</strong> {{ storeName }}</p>
+      <p><strong>테마:</strong> {{ themeName }}</p>
       <div class="rating">
-<!--        <label for="rate">별점:</label>-->
-        <span v-for="star in 5" :key="star" @click="setRating(star)" class="star" :class="{ filled: star <= rating }">&#9733;</span>
+        <span v-for="star in 5" :key="star" @click="setRating(star)" class="star" :class="{ filled: star <= review.rating }">&#9733;</span>
       </div>
       <div class="form-group">
         <input type="text" v-model="review.title" id="title" placeholder="제목을 입력하세요" />
       </div>
       <div class="form-group">
-        <textarea v-model="review.content" id="content" placeholder="내용을 입력하세요"></textarea>
+        <textarea v-model="review.contents" id="content" placeholder="내용을 입력하세요"></textarea>
       </div>
       <div class="button-group">
-        <button class="submit-button" @click="submitReview">리뷰 제출</button>
+        <button class="submit-button" @click="submitReview()">리뷰 제출</button>
         <button class="close-button" @click="closeModal">닫기</button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {axiosConsumer} from "@/axios.js";
+
 export default {
   props: { // 부모 컴포넌트가 자식 컴포넌트에 데이터를 전달하는 방법
     isVisible: {
       type: Boolean,
       required: true
     },
-    // escapeCafeName: {
-    //   type: String,
-    //   required: true
-    // },
-    // themeName: {
-    //   type: String,
-    //   required: true
-    // }
+    storeName: {
+      type: String,
+      required: true
+    },
+    themeName: {
+      type: String,
+      required: true
+    },
+    reservationId: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
-      rating: 0,
       review: {
+        rating: 0,
         title: '',
-        content: ''
+        contents: ''
       }
     };
   },
   methods: {
     setRating(star) {
-      this.rating = star;
+      this.review.rating = star;
     },
     closeModal() {
+      this.review = {
+        rating: 0,
+        title: '',
+        contents: ''
+      };
       this.$emit('close');
     },
-    submitReview() {
+    async submitReview() {
+      console.log(this.reservationId);
       // 실제 리뷰 제출 로직을 여기에 추가
-      alert(`리뷰가 제출되었습니다.\n제목: ${this.review.title}\n내용: ${this.review.content}\n별점: ${this.rating}`);
-      this.closeModal();
+      try {
+        // 예약 취소 API 호출
+        const response = await axiosConsumer.post(`/reviews`, {
+          reservationId: this.reservationId,
+          title: this.review.title,
+          contents: this.review.contents,
+          rating: this.review.rating
+        });
+        alert(`리뷰 작성 완료!`);
+        this.closeModal();
+      } catch (error) {
+        let errorMessage = '리뷰 등록 중 오류가 발생했습니다.';
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message;
+        }
+        console.error('Error Writing Review:', error);
+        // 에러 발생 시 사용자에게 알림
+        alert(errorMessage);
+      }
     }
   }
 }
