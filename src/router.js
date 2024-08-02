@@ -10,72 +10,73 @@ import ReservationInfo from "@/components/mypage/ReservationInfo.vue";
 import FollowInfo from "@/components/mypage/FollowInfo.vue";
 import MainTheme from '@/components/MainTheme.vue'
 import SearchStore from '@/components/SearchStore.vue'
-import ReviewList from '@/components/review/ReviewList.vue'
 
-export const router = createRouter({
-    history: createWebHistory(),
-    routes: [{
-        path: "/",
-        name: "Home",
+
+const routes = [
+    {
+        path: '/',
+        name: 'Home',
         component: Home
     },
-        {
-            path: "/signup",
-            component: SignUp
-        },
-        {
-            path: "/about",
-            component: About
-        },
-        {
-            path: "/profile",
-            component: MyPage,
-            children: [
-                {
-                    path: '',
-                    component: UserInfo
-                },
-                {
-                    path: 'reservations',
-                    component: ReservationInfo
-                },
-                {
-                    path: 'follow',
-                    component: FollowInfo
-                },
-                // {
-                //     path: 'edit',
-                //     name: 'EditProfile',
-                //     component: EditProfile
-                // }
-            ]
-        },
+    {
+        path: '/signup',
+        component: SignUp
+    },
+    {
+        path: '/about',
+        component: About
+    },
+    {
+        path: '/profile',
+        component: MyPage,
+        children: [
+            {
+                path: '',
+                component: UserInfo
+            },
+            {
+                path: 'reservations',
+                component: ReservationInfo
+            },
+            {
+                path: 'follow',
+                component: FollowInfo
+            }
+            // {
+            //     path: 'edit',
+            //     name: 'EditProfile',
+            //     component: EditProfile
+            // }
+        ]
+    },
+    // {
+    //     path: '/reservation',
+    //     component: Reservation
+    // },
+    {
+        path: '/login',
+        component: Login
+    },
+    {
+        path: '/main-theme',
+        component: MainTheme
+    },
+    {
+        path: '/search-store',
+        component: SearchStore
+    },
+    //전체 테마 조회 페이지 나중에 위치 수정 필요
+    {
+        path: '/store/storeId',
+        name: 'Theme',
+        component: MainTheme,
+        props: true
+    }
+]
 
-        {
-            path: "/login",
-            component: Login
-        },
-        {
-            path:"/main-theme",
-            component: MainTheme
-        },
-        {
-            path:"/search-store",
-            component: SearchStore
-        },
-
-        //전체 테마 조회 페이지 나중에 위치 수정 필요
-        {
-            path:"/store/storeId",
-            name: 'Theme',
-            component: MainTheme,
-            props: true
-        },
-
-        {
-            path: '/search/reviews',
-            name: 'ReviewList',
-            component: ReviewList }
-
-    ]
+const router = createRouter({
+    history:createWebHistory("/escapeSpartaFront/"),
+    routes
 })
+
+export default router
