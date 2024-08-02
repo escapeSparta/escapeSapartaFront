@@ -73,7 +73,7 @@ export const router = createRouter({
         },
 
         {
-            path: '/search/reviews',
+            path: '/reviews',
             name: 'ReviewList',
             component: ReviewList }
 

@@ -3,7 +3,7 @@
     <h1>EscapeSparta Login</h1>
     <input type="email" v-model="email" placeholder="Enter your email" required />
     <input type="password" v-model="password" placeholder="Enter your password" required />
-    <button type="button" @click="login">Login</button>
+    <button type="button" @click="loginUser">Login</button>
     <p>Or login with:</p>
     <div class="social-buttons">
       <button @click="socialLogin('Google')">Google</button>
@@ -15,55 +15,36 @@
 </template>
 
 <script>
-import axios from 'axios'
-import {axiosCore} from "@/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       email: '',
-      password: ''
-    }
+      password: '',
+    };
   },
   methods: {
-    point: undefined,
-    createAt: undefined,
-
-    async login() {
+    ...mapActions('auth', ['login']),
+     async loginUser() {
       try {
-        const response = await axiosCore.post('/users/login', {
+         await this.login({
           email: this.email,
-          password: this.password
-        })
-        console.log('Login response:', response)
-        alert('Logged in successfully.')
-        // 여기에 로그인 성공 후 처리 로직을 추가하세요 (예: 토큰 저장, 리다이렉트 등)
-
-        console.log('Response headers:', response.headers);
-
-        const accessToken = response.headers['authorization'];
-        const refreshToken = response.headers['refreshtoken'];
-        console.log(accessToken);
-
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-
-        this.moveMain();
-
+          password: this.password,
+        });
+        alert('Logged in successfully.');
+        this.$router.push({ name: 'Home' });
       } catch (error) {
-        console.error('Error logging in:', error)
-        alert('Failed to log in. Please try again.')
+        console.error('Error logging in:', error);
+        alert('Failed to log in. Please try again.');
       }
     },
     socialLogin(platform) {
-      console.log(`Login with ${platform}`)
-      window.location.href = `https://escapesparta.net/oauth2/authorization/${platform}`
+      console.log(`Login with ${platform}`);
+      window.location.href = `https://escapesparta.net/oauth2/authorization/${platform}`;
     },
-    moveMain(){
-      this.$router.push({name: 'Home'});
-    }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

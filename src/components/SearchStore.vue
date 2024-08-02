@@ -31,7 +31,7 @@
 
       <section class="search-results">
         <div v-for="result in searchResults" :key="result.storeId" class="theme-card" @click="navigateToTheme(result.storeId)">
-          <img :src="result.image" class="theme-image" width="300" height="200">
+          <img :src="result.storeImage" class="theme-image" width="300" height="200">
           <div class="theme-details">
             <div>
               <div class="theme-title">{{ result.title }}</div>

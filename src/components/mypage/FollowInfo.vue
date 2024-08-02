@@ -19,7 +19,8 @@
 
 <script>
 import axios from 'axios';
-import {axiosConsumer} from "@/axios.js";
+// import {axiosConsumer} from "@/store/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   name: 'FollowInfo',
@@ -32,9 +33,13 @@ export default {
     await this.fetchFollowStores();
   },
   methods: {
+    ...mapActions('axios', ['axiosConsumerRequest']),
     async fetchFollowStores() {
       try {
-        const response = await axiosConsumer.get('/follow/stores');
+        const response = await this.axiosConsumerRequest({
+          method: 'get',
+          url: '/follow/stores'
+        })
         this.stores = response.data.data;
       } catch (error) {
         console.error('Error fetching follow Stores:', error);
@@ -49,7 +54,10 @@ export default {
       if (isConfirmed) {
         try {
           // 예약 취소 API 호출
-          const response = await axiosConsumer.delete(`/follow/stores/${id}`);
+          const response = await this.axiosConsumerRequest({
+            method: 'delete',
+            url: '/follow/stores/${id}'
+          })
 
           // 예약 목록을 업데이트합니다. (예: 취소된 예약을 제외한 예약 목록으로 업데이트)
           this.reservations = response.data.data;

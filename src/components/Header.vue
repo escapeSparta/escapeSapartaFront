@@ -9,48 +9,67 @@
         <router-link to="/profile" class="nav-link" v-if="isLoggedIn">프로필</router-link>
         <router-link to="/signup" class="nav-link" v-if="!isLoggedIn">회원가입</router-link>
         <router-link to="/login" class="nav-link" v-if="!isLoggedIn">로그인</router-link>
-        <button @click="logout" class="nav-link" v-if="isLoggedIn">로그아웃</button>
+        <button @click="handleLogout" class="nav-link" v-if="isLoggedIn">로그아웃</button>
       </div>
     </nav>
   </header>
 </template>
 
 <script>
-import {axiosCore} from "@/axios.js";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'Header',
-  data() {
-    return {
-      isLoggedIn: false
-    };
-  },
-  async created() {
-    // 컴포넌트 생성 시 로그인 상태를 확인
-    this.isLoggedIn = !!localStorage.getItem('accessToken');
+  computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
   },
   methods: {
-    async logout() {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-
+    ...mapActions('auth', ['logout']),
+    async handleLogout() {
       try {
-        await axiosCore.put("/users/logout", {}, {
-          headers: {
-            'Authorization': localStorage.getItem("accessToken")
-          }
-        })
+        await this.logout();  // Vuex의 logout 액션 호출
+        this.$router.push('/login');  // 로그인 화면으로 리디렉션
       } catch (error) {
-        console.error('Error log out: ', error);
+        console.error('Error logging out:', error);
+        alert('Failed to log out. Please try again.');
       }
-
-      this.$nextTick(() => {
-        this.isLoggedIn = false; // 상태 업데이트 후 DOM이 업데이트되도록 보장
-        this.$router.push('/login');
-      });
     }
-  }
-}
+  },
+};
+// import {axiosCore} from "@/store/axios.js";
+//
+// export default {
+//   name: 'Header',
+//   data() {
+//     return {
+//       isLoggedIn: false
+//     };
+//   },
+//   async created() {
+//     // 컴포넌트 생성 시 로그인 상태를 확인
+//     this.isLoggedIn = !!localStorage.getItem('accessToken');
+//   },
+//   methods: {
+//     async logout() {
+//       localStorage.removeItem("accessToken");
+//       localStorage.removeItem("refreshToken");
+//
+//       try {
+//         await axiosCore.put("/users/logout", {}, {
+//           headers: {
+//             'Authorization': localStorage.getItem("accessToken")
+//           }
+//         })
+//       } catch (error) {
+//         console.error('Error log out: ', error);
+//       }
+//
+//       this.$nextTick(() => {
+//         this.isLoggedIn = false; // 상태 업데이트 후 DOM이 업데이트되도록 보장
+//         this.$router.push('/login');
+//       });
+//     }
+//   }
+// }
 </script>
 
 <style scoped>

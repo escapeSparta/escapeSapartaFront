@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { axiosCore, axiosConsumer } from "@/axios.js";
+import { mapActions } from 'vuex';
 import EditProfileModal from "@/components/mypage/EditProfileModal.vue";
 import EditPasswordModal from "@/components/mypage/EditPasswordModal.vue";
 import WithdrawModal from "@/components/mypage/WithdrawModal.vue";
@@ -77,9 +77,13 @@ export default {
     await this.fetchUserProfile();
   },
   methods: {
+    ...mapActions('axios', ['axiosCoreRequest', 'axiosConsumerRequest']),
     async fetchUserProfile() {
       try {
-        const response = await axiosConsumer.get('/users/profile');
+        const response = await this.axiosConsumerRequest({
+          method: 'get',
+          url: '/users/profile'
+        });
         const userData = response.data.data;
         this.user = {
           name: userData.name,
@@ -100,40 +104,38 @@ export default {
     showChangePasswordModal() {
       this.isEditPasswordModalVisible = true;
     },
-
     closeChangePasswordModal() {
       this.isEditPasswordModalVisible = false;
       this.fetchUserProfile();
     },
-
     confirmDeleteAccount() {
       if (confirm('정말로 회원 탈퇴를 하시겠습니까?')) {
         this.isWithdrawModalVisible = true;
       }
     },
-
     closeWithdrawModal() {
       this.isWithdrawModalVisible = false;
     },
-
-    async deleteAccount() {
+    async deleteAccount(password) { // password 인자를 추가합니다.
       try {
-        // 예약 취소 API 호출
-        await axiosCore.put(`/users/withdraw`, {
-          password: this.password,
+        await this.axiosCoreRequest({
+          method: 'put',
+          url: '/users/withdraw',
+          data: {
+            password: password
+          }
         });
-        alert(`회원 탈퇴가 완료되었습니다.`);
+        alert('회원 탈퇴가 완료되었습니다.');
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         this.isWithdrawModalVisible = false;
         this.$router.push('/');
       } catch (error) {
-        let errorMessage = '리뷰 등록 중 오류가 발생했습니다.';
+        let errorMessage = '탈퇴 중 오류가 발생했습니다.';
         if (error.response && error.response.data) {
           errorMessage = error.response.data.message;
         }
-        console.error('Error Writing Review:', error);
-        // 에러 발생 시 사용자에게 알림
+        console.error('Error Withdraw:', error);
         alert(errorMessage);
       }
     }
