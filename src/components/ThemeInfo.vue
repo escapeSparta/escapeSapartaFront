@@ -30,7 +30,7 @@
                 <button
                   v-for="n in maxPlayersArray"
                   :key="n"
-                  @click="selectPlayer(n)"
+                  @click="selectPlayer(n, selectedTheme.price)"
                   :class="{ 'selected': player === n }">
                   {{ n }}인
                 </button>
@@ -48,12 +48,12 @@
               :key="time.startTime"
               class="time-slot"
               :class="{ 'disabled': time.themeTimeStatus === 'DISABLE', 'selected': selectedTime === time }"
-              @click="time.themeTimeStatus === 'ENABLE' ? selectTime(time) : null"
-            >
+              @click="time.themeTimeStatus === 'ENABLE' ? selectTime(time) : null">
               {{ formatTime(time.startTime) }}
             </div>
           </div>
-          <button v-if="selectedTime" @click="book" style="margin-top: 1rem;">예약하기</button>
+
+          <button v-if="selectedTime" @click="book(this.selectedTimeId, this.player, this.price)" style="margin-top: 1rem;">예약하기</button>
         </div>
       </div>
     </div>
@@ -78,6 +78,8 @@
 
 <script>
 import apiSearch from '@/api/Search.js'
+import {axiosReservation} from "@/axios.js";
+
 var idid = null;
 export default {
   data() {
@@ -86,10 +88,12 @@ export default {
       selectedTheme: null,
       selectedDate: null,
       selectedTime: null,
+      selectedTimeId: null,  // 새로운 변수 추가
       isDateModalVisible: false,
       currentDate: new Date(),
       times: [],
-      player: null
+      player: null,
+      price: null
     };
   },
 
@@ -162,8 +166,10 @@ export default {
           // 날짜와 시간을 초기화
           this.selectedDate = null;
           this.selectedTime = null;
+          this.selectedTimeId = null;  // 추가: 시간 ID 초기화
           this.times = [];
           this.player = null;
+          this.price = null;
         })
         .catch(e => {
           console.log(e);
@@ -199,6 +205,7 @@ export default {
     },
     selectTime(time) {
       this.selectedTime = time;
+      this.selectedTimeId = time.themeTimeId;  // 새로운 변수 업데이트
     },
     formatTime(dateTimeString) {
       const date = new Date(dateTimeString);
@@ -215,16 +222,31 @@ export default {
         console.log(e);
       }
     },
-    selectPlayer(player) {
+    selectPlayer(player, selectedPrice) {
       this.player = player;
+      this.price = selectedPrice * player;
     },
-    book() {
+    async book(themeTimeId, player, price) {
       if (!this.selectedTheme || !this.selectedDate || !this.selectedTime || !this.player) {
         alert('테마, 날짜, 시간, 인원을 모두 선택해주세요.');
         return;
       }
-      alert(`예약이 완료되었습니다!\n테마: ${this.selectedTheme.title}\n날짜: ${this.formattedDate}\n시간: ${this.selectedTime}\n인원: ${this.player}인`);
-    }
+      try {
+        //예약 정보가 담겨있는 response
+        const response = await axiosReservation.post('/reservations', {
+          themeTimeId: themeTimeId,
+          player: player,
+          price: price,
+          paymentStatus: 'PENDING'
+        })
+        this.$router.push({name: 'BookingInfo', params: {response: response}});
+        // alert(`예약이 완료되었습니다!\n테마: ${this.selectedTheme.title}\n날짜: ${this.formattedDate}\n시간: ${this.selectedTime}\n인원: ${this.player}인`);
+      }catch(error){
+        console.log(error);
+        alert(error);
+      }
+    },
+
   }
 };
 </script>
@@ -382,27 +404,6 @@ h1, h2, h3 {
   margin-bottom: 1rem;
 }
 
-.time-slots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-
-.time-slot {
-  padding: 0.5rem;
-  text-align: center;
-  border: 1px solid #0f0;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.time-slot:hover, .time-slot.selected {
-  background-color: #0f0;
-  color: #000;
-}
-
 button {
   background-color: #0f0;
   color: #000;
@@ -527,4 +528,27 @@ button.selected {
 .player-selection button {
   margin: 0.2rem;
 }
+
+.time-slot {
+  padding: 0.5rem;
+  text-align: center;
+  border: 1px solid #0f0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.time-slot:hover, .time-slot.selected {
+  background-color: #0f0;
+  color: #000;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+
 </style>
