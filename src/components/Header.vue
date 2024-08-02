@@ -9,7 +9,7 @@
         <router-link to="/profile" class="nav-link" v-if="accessToken && isLoggedIn">프로필</router-link>
         <router-link to="/signup" class="nav-link" v-if="!accessToken && !isLoggedIn">회원가입</router-link>
         <router-link to="/login" class="nav-link" v-if="!accessToken && !isLoggedIn">로그인</router-link>
-        <button @click="handleLogout" class="nav-link" v-if="accessToken && isLoggedIn">로그아웃</button>
+        <button @click="handleLogout" class="nav-link logout-button" v-if="accessToken && isLoggedIn">로그아웃</button>
       </div>
     </nav>
   </header>
@@ -78,7 +78,6 @@ nav {
   color: #0f0;
   text-shadow: 0 0 10px #0f0;
 }
-
 .nav-link {
   color: #0f0;
   text-decoration: none;
@@ -87,8 +86,11 @@ nav {
   border: 1px solid #0f0;
   border-radius: 5px;
   transition: all 0.3s ease;
-  background-color: transparent; /* 버튼과 링크 배경 색상 통일 */
-  cursor: pointer; /* 버튼 클릭 시 손 모양 커서 */
+  background-color: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-link:hover {
@@ -98,5 +100,9 @@ nav {
 
 .nav-link:active {
   background-color: #0d0; /* 클릭 시 색상 */
+}
+
+.logout-button {
+  font-size: 1rem;
 }
 </style>

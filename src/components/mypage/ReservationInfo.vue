@@ -132,12 +132,9 @@ export default {
 };
 </script>
 <style scoped>
-.reservations {
-  padding: 2rem;
-}
-
 .reservation-list {
   padding-left: 15px; /* 왼쪽 패딩 추가 */
+  padding-right: 15px; /* 왼쪽 패딩 추가 */
 }
 
 .reservation-item {

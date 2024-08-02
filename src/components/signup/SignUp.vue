@@ -6,18 +6,18 @@
         <input type="email" v-model="email" placeholder="Enter your email" required>
         <button type="button" class="verify-button" @click="sendVerificationCode">이메일 인증</button>
       </div>
-<!--      <input v-if="showVerificationInput" type="text" v-model="verificationCode" placeholder="Enter verification code" required>-->
       <input v-if="showVerificationInput" type="text" v-model="certificateCode" placeholder="Enter certificate code" required>
       <input type="password" v-model="password" placeholder="Create a password" required>
       <input type="text" v-model="name" placeholder="Enter your name" required>
       <!--      <input type="text" v-model="adminKey" placeholder="Enter admin key (if applicable)">-->
-      <button type="button" @click="createAccount">회원가입</button>
+      <button type="button" class="signup-button" @click="createAccount">회원가입</button>
       <p>Or sign up with:</p>
       <div class="social-buttons">
         <button @click="socialSignUp('Google')">Google</button>
         <button @click="socialSignUp('Kakao')">Kakao</button>
         <button @click="socialSignUp('Naver')">Naver</button>
       </div>
+      <router-link to="/" class="back-link">Back to Home</router-link>
     </div>
   </div>
 </template>
@@ -112,7 +112,9 @@ h1 {
   margin-bottom: 10px;
 }
 
-input, button {
+
+input,
+button {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -127,26 +129,28 @@ input::placeholder {
   color: #808080;
 }
 
-.verify-button {
-  width: auto;
-  flex-shrink: 0;
+button {
   background-color: #00ff00;
   color: #000000;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-left: 10px;
 }
 
 button:hover {
   background-color: #00cc00;
 }
 
+.verify-button {
+  width: 40%;
+  margin-left: 0.5rem;
+}
+
 p {
   color: #808080;
-  text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .social-buttons {
@@ -158,5 +162,13 @@ p {
   width: 30%;
   background-color: #00ff00;
   color: #000000;
+}
+
+.back-link {
+  display: block;
+  margin-top: 20px;
+  color: #00ff00;
+  text-decoration: none;
+  text-align: center;
 }
 </style>

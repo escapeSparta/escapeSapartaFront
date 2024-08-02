@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-// import {axiosConsumer} from "@/store/axios.js";
 import { mapActions } from 'vuex';
 
 export default {
@@ -100,6 +98,8 @@ export default {
 
 .card img {
   border-radius: 8px;
+  margin-top: 1rem;
+  object-fit: cover;
 }
 
 .button-group {
