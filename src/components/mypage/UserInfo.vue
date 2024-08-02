@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import EditProfileModal from "@/components/mypage/EditProfileModal.vue";
 import EditPasswordModal from "@/components/mypage/EditPasswordModal.vue";
 import WithdrawModal from "@/components/mypage/WithdrawModal.vue";

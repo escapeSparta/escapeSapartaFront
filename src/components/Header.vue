@@ -6,10 +6,10 @@
         <router-link to="/" class="nav-link">홈</router-link>
         <router-link to="/search-store" class="nav-link">검색</router-link>
         <router-link to="/reviews" class="nav-link">리뷰게시판</router-link>
-        <router-link to="/profile" class="nav-link" v-if="isLoggedIn">프로필</router-link>
-        <router-link to="/signup" class="nav-link" v-if="!isLoggedIn">회원가입</router-link>
-        <router-link to="/login" class="nav-link" v-if="!isLoggedIn">로그인</router-link>
-        <button @click="handleLogout" class="nav-link" v-if="isLoggedIn">로그아웃</button>
+        <router-link to="/profile" class="nav-link" v-if="accessToken && isLoggedIn">프로필</router-link>
+        <router-link to="/signup" class="nav-link" v-if="!accessToken && !isLoggedIn">회원가입</router-link>
+        <router-link to="/login" class="nav-link" v-if="!accessToken && !isLoggedIn">로그인</router-link>
+        <button @click="handleLogout" class="nav-link" v-if="accessToken && isLoggedIn">로그아웃</button>
       </div>
     </nav>
   </header>
@@ -20,7 +20,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters('auth', ['isLoggedIn']),
+    ...mapGetters('auth', ['isLoggedIn', 'accessToken']),
   },
   methods: {
     ...mapActions('auth', ['logout']),
@@ -32,44 +32,14 @@ export default {
         console.error('Error logging out:', error);
         alert('Failed to log out. Please try again.');
       }
+    },
+    hasAccessToken() {
+      const token = localStorage.getItem('accessToken');
+      console.log(!!token);
+      return !!token; // token이 null, undefined, 빈 문자열이 아니면 true 반환
     }
   },
 };
-// import {axiosCore} from "@/store/axios.js";
-//
-// export default {
-//   name: 'Header',
-//   data() {
-//     return {
-//       isLoggedIn: false
-//     };
-//   },
-//   async created() {
-//     // 컴포넌트 생성 시 로그인 상태를 확인
-//     this.isLoggedIn = !!localStorage.getItem('accessToken');
-//   },
-//   methods: {
-//     async logout() {
-//       localStorage.removeItem("accessToken");
-//       localStorage.removeItem("refreshToken");
-//
-//       try {
-//         await axiosCore.put("/users/logout", {}, {
-//           headers: {
-//             'Authorization': localStorage.getItem("accessToken")
-//           }
-//         })
-//       } catch (error) {
-//         console.error('Error log out: ', error);
-//       }
-//
-//       this.$nextTick(() => {
-//         this.isLoggedIn = false; // 상태 업데이트 후 DOM이 업데이트되도록 보장
-//         this.$router.push('/login');
-//       });
-//     }
-//   }
-// }
 </script>
 
 <style scoped>

@@ -26,14 +26,14 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['login']),
-     async loginUser() {
+    async loginUser() {
       try {
-         await this.login({
+        await this.login({
           email: this.email,
           password: this.password,
         });
         alert('Logged in successfully.');
-        this.$router.push({ name: 'Home' });
+        this.$router.push({name: 'Home'});
       } catch (error) {
         console.error('Error logging in:', error);
         alert('Failed to log in. Please try again.');
@@ -64,6 +64,7 @@ body {
   border-radius: 10px;
   border: 2px solid #00ff00;
   width: 300px;
+  text-align: center; /* Center align text and buttons */
 }
 
 h1 {
@@ -71,9 +72,8 @@ h1 {
   text-align: center;
   margin-bottom: 20px;
   font-size: 24px;
-  text-shadow:
-    0 0 5px #00ff00,
-    0 0 10px #00ff00;
+  text-shadow: 0 0 5px #00ff00,
+  0 0 10px #00ff00;
 }
 
 input,
@@ -106,7 +106,6 @@ button:hover {
 
 p {
   color: #808080;
-  text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
 }
@@ -124,7 +123,6 @@ p {
 
 .back-link {
   display: block;
-  text-align: center;
   margin-top: 20px;
   color: #00ff00;
   text-decoration: none;

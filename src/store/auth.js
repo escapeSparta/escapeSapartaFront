@@ -7,6 +7,7 @@ const state = {
 
 const mutations = {
     SET_LOGIN_STATE(state, payload) {
+        console.log(payload);
         state.isLoggedIn = payload.isLoggedIn;
         state.accessToken = payload.accessToken;
         state.refreshToken = payload.refreshToken;
@@ -52,7 +53,8 @@ const actions = {
 };
 
 const getters = {
-    isLoggedIn: state => state.isLoggedIn
+    isLoggedIn: state => state.isLoggedIn,
+    accessToken: state => state.accessToken
 };
 
 export default {
