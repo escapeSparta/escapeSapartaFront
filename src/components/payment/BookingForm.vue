@@ -68,9 +68,11 @@ export default {
       }
 
       try {
-        console.log(this.$route.query.reservationId);
+        // console.log(this.$route.query.reservationId);
         const response = await apiPayment.postReservationForPay(this.$route.query.reservationId);
+        console.log(response)
         const nextRedirectPcUrl = response.data;
+        console.log(nextRedirectPcUrl)
         window.location.href = nextRedirectPcUrl;
       } catch (e) {
         console.log(e);
