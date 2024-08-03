@@ -62,7 +62,6 @@ export const router = createRouter({
             path: '/reservation',
             name: 'Reservation',
             component: Reservation,
-            props: true
         },
         // {
         //     path: "/theme",
@@ -98,7 +97,6 @@ export const router = createRouter({
             path: '/booking-info',
             name: 'BookingInfo',
             component: bookingInfo,
-            props: route => ({ response: route.params.response })
         },
         {
             path: '/booking-form',
