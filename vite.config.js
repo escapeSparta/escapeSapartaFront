@@ -2,11 +2,9 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 
-// function fileURLToPath(url) {
-//   return "";
-// }
 
 export default defineConfig({
+  base: '/escapeSpartaFront/', // publicPath에 해당하는 설정
   plugins: [vue()],
   resolve: {
     alias: {
