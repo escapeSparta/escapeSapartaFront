@@ -4,7 +4,6 @@
       <h1>전국 방탈출 카페 검색</h1>
       <section id="search" class="search-section">
         <form class="search-form" @submit.prevent="searchEscapeRooms">
-          <input type="text" v-model="keyWord" placeholder="키워드 입력 (카페명, 테마명 등)">
           <select v-model="storeRegion">
             <option value="ALL">지역 선택</option>
             <option value="SEOUL">서울</option>
@@ -25,13 +24,14 @@
             <option value="GYEONGNAM">경상남도</option>
             <option value="JEJU">제주도</option>
           </select>
+          <input type="text" v-model="keyWord" placeholder="키워드 입력 (카페명, 테마명 등)">
           <button type="submit">검색</button>
         </form>
       </section>
 
       <section class="search-results">
         <div v-for="result in searchResults" :key="result.storeId" class="theme-card" @click="navigateToTheme(result.storeId)">
-          <img :src="result.storeImage" class="theme-image" width="300" height="200">
+          <img :src="result.storeImage ? result.storeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" class="theme-image" width="300" height="200">
           <div class="theme-details">
             <div>
               <div class="theme-title">{{ result.title }}</div>
@@ -136,18 +136,22 @@ h1, h2 {
 }
 .search-form {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* 요소들을 왼쪽에 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
   gap: 1rem;
 }
+
 input[type="text"], select {
+  flex: 1 1 auto;
   padding: 0.5rem;
   border: 1px solid #0f0;
   background-color: #000;
   color: #0f0;
   border-radius: 5px;
 }
+
 button {
+  flex-shrink: 0;
   background-color: #0f0;
   color: #000;
   border: none;
@@ -184,7 +188,7 @@ button:hover {
 .theme-image {
   width: 100%;
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 5px;
   margin-bottom: 1rem;
 }

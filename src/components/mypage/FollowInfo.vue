@@ -97,12 +97,18 @@ export default {
 }
 
 .card img {
+  width: 100%;
+  height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+  max-height: 200px;
   border-radius: 8px;
   margin-top: 1rem;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .button-group {
+  display: flex;
+  justify-content: center; /* 버튼들을 수평으로 가운데 정렬 */
+  gap: 10px; /* 버튼 간의 간격을 조정 */
   margin-top: 10px;
 }
 

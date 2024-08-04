@@ -4,7 +4,7 @@
     <h1>프로필 조회</h1>
     <div class="user-container">
       <div class="user-avatar">
-        <img src="https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_profile.png" alt="프로필 사진" class="avatar">
+        <img src="https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_profile.png" alt="프로필 사진" class="avatar">
       </div>
       <div class="user-details">
         <div class="user-info-header">

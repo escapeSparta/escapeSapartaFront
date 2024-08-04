@@ -4,6 +4,9 @@ import store from '@/store';
 
 const axiosSearch = axios.create({
     baseURL: 'http://localhost:8085',
+    headers: {
+        'Content-Type': 'application/json'
+    }
 })
 
 const axiosCore = axios.create({
