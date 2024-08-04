@@ -59,7 +59,7 @@ const setInterceptors = (axiosInstance) => {
         return response;
     }, async error => {
         const originalRequest = error.config;
-        if (error.response && error.response.data.statusCode === 900 && !originalRequest._retry) {
+        if (error.response && error.response.data.statusCode === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
@@ -86,10 +86,6 @@ const setInterceptors = (axiosInstance) => {
                 // 로그인 화면으로 리디렉션
                 window.location.href = '/login';
             }
-        } else if(error.response && error.response.data.statusCode === 401) {
-            store.dispatch('auth/logout');
-            // 로그인 화면으로 리디렉션
-            window.location.href = '/login';
         } else if(error.response && error.response.data.statusCode === 500) {
             store.dispatch('auth/logout');
             // 로그인 화면으로 리디렉션
