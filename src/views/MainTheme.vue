@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div class="container">
-      <h2 id="popular">이번 주 인기 테마</h2>
+      <h2 id="popular">이번 주 인기 방탈출 카페</h2>
       <section class="popular-themes">
-        <div v-for="theme in themes" :key="theme.storeId" class="theme-card">
-          <img :src="theme.storeImage" :alt="theme.title" class="theme-image" width="200" height="150">
+        <div v-for="theme in themes" :key="theme.storeId" class="theme-card" @click="goToReservation(theme.storeId, theme.title)">
+          <img :src="theme.storeImage ? theme.storeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" :alt="theme.title" class="theme-image" width="200" height="150">
           <h3>{{ theme.title }}</h3>
           <p>{{ theme.address }}</p>
         </div>
@@ -18,6 +18,7 @@ import apiSearch from '@/api/Search.js'
 
 export default {
   name: 'App',
+  props: ['storeId'],
   data() {
     return {
       themes: []
@@ -35,6 +36,9 @@ export default {
   methods: {
     navigateTo(page) {
       window.location.href = page;
+    },
+    goToReservation(storeId, storeName) {
+      this.$router.push({ name: 'Theme', params: { storeId: storeId, storeTitle: storeName } });
     }
   }
 }

@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import {axiosConsumer} from "@/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   props: { // 부모 컴포넌트가 자식 컴포넌트에 데이터를 전달하는 방법
@@ -52,6 +52,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions('axios', ['axiosConsumerRequest']),
     setRating(star) {
       this.review.rating = star;
     },
@@ -68,11 +69,15 @@ export default {
       // 실제 리뷰 제출 로직을 여기에 추가
       try {
         // 예약 취소 API 호출
-        const response = await axiosConsumer.post(`/reviews`, {
-          reservationId: this.reservationId,
-          title: this.review.title,
-          contents: this.review.contents,
-          rating: this.review.rating
+        const response = await this.axiosConsumerRequest({
+          method: 'post',
+          url: '/reviews',
+          data: {
+            reservationId: this.reservationId,
+            title: this.review.title,
+            contents: this.review.contents,
+            rating: this.review.rating
+          }
         });
         alert(`리뷰 작성 완료!`);
         this.closeModal();
