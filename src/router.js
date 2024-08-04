@@ -1,15 +1,13 @@
 // import Vue from "vue";
 import {createRouter, createWebHistory} from "vue-router";
-import Home from "./views/Home.vue";
-import About from "./views/About.vue";
-import SignUp from './components/signup/SignUp.vue';
+import SignUp from './components/auth/SignUp.vue';
 import MyPage from "@/views/MyPage.vue";
-import Login from "@/components/login/Login.vue";
+import Login from "@/components/auth/Login.vue";
 import UserInfo from "@/components/mypage/UserInfo.vue"
 import ReservationInfo from "@/components/mypage/ReservationInfo.vue";
 import FollowInfo from "@/components/mypage/FollowInfo.vue";
-import MainTheme from '@/components/MainTheme.vue'
-import SearchStore from '@/components/SearchStore.vue'
+import MainTheme from '@/views/MainTheme.vue'
+import SearchStore from '@/views/SearchStore.vue'
 import Reservation from "@/views/Reservation.vue";
 import bookingInfo from '@/components/payment/BookingInfo.vue'
 import bookingForm from '@/components/payment/BookingForm.vue'
@@ -18,22 +16,19 @@ import paySuccess from './components/payment/Home.vue';
 import payCancel from './components/payment/Cancel.vue';
 import payFail from './components/payment/Fail.vue';
 import ReviewList from '@/components/review/ReviewList.vue'
-import ThemeInfo from '@/components/ThemeInfo.vue'
+import ThemeInfo from '@/views/ThemeInfo.vue'
 
 export const router = createRouter({
     history: createWebHistory(),
-    routes: [{
+    routes: [
+        {
         path: "/",
-        name: "Home",
-        component: Home
-    },
+        name: 'Home',
+        component: MainTheme
+        },
         {
             path: "/signup",
             component: SignUp
-        },
-        {
-            path: "/about",
-            component: About
         },
         {
             path: "/profile",
@@ -50,12 +45,7 @@ export const router = createRouter({
                 {
                     path: 'follow',
                     component: FollowInfo
-                },
-                // {
-                //     path: 'edit',
-                //     name: 'EditProfile',
-                //     component: EditProfile
-                // }
+                }
             ]
         },
         {
@@ -63,17 +53,9 @@ export const router = createRouter({
             name: 'Reservation',
             component: Reservation,
         },
-        // {
-        //     path: "/theme",
-        //     component: Theme
-        // },
         {
             path: "/login",
             component: Login
-        },
-        {
-            path:"/main-theme",
-            component: MainTheme
         },
         {
             path:"/search-store",
@@ -87,11 +69,11 @@ export const router = createRouter({
             component: ThemeInfo,
             props: true
         },
-
         {
-            path: '/search/reviews',
+            path: '/reviews',
             name: 'ReviewList',
-            component: ReviewList
+            component: ReviewList,
+            props: route => ({ storeId: route.query.storeId, themeId: route.query.themeId })
         },
         {
             path: '/booking-info',

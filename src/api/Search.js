@@ -12,7 +12,7 @@ export default {
         keyWord: keyWord,
         storeRegion: storeRegion,
         sort: sort
-      }
+      }, withCredentials: true
     });
   },
 

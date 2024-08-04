@@ -45,18 +45,13 @@ header {
   justify-content: space-between;
   align-items: center;
 }
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
+
 .user-actions a {
   color: #0f0;
   text-decoration: none;
   margin-left: 15px;
 }
-.user-icon {
-  font-size: 20px;
-}
+
 main {
   flex-grow: 1;
   padding: 50px 20px;
@@ -70,12 +65,7 @@ main {
   justify-content: center;
 
 }
-.booking-info, .booking-form {
-  background-color: #001100;
-  border: 1px solid #0f0;
-  padding: 20px;
-  margin-bottom: 20px;
-}
+
 h1, h2, h3 {
   color: #0f0;
   text-shadow: 0 0 10px #0f0;

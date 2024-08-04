@@ -21,32 +21,35 @@
 
 
 <script>
-import axios from 'axios';
+import { mapActions } from "vuex";
 
 export default {
+  props: ['storeId', 'themeId'],
   data() {
     return {
-      reviews: [],
-      storeId: null, // storeId 초기화
-      themeId: null  // themeId 초기화
+      reviews: []
     };
   },
   created() {
     // 실제 애플리케이션 로직에 따라 storeId와 themeId를 설정
-    this.storeId = 1;  // 예시 storeId, 실제 값으로 대체
-    this.themeId = 1;  // 예시 themeId, 실제 값으로 대체
     this.fetchReviews();
   },
   methods: {
+    ...mapActions('axios', ['axiosSearchRequest']),
     async fetchReviews() {
+      console.log(this.storeId);
+      console.log(this.themeId);
+
       try {
         // storeId와 themeId를 쿼리 파라미터로 전송
-        const response = await axios.get(`http://localhost:8085/search/reviews`, {
+        const response = await this.axiosSearchRequest({
+          method: 'get',
+          url: '/search/reviews',
           params: {
             storeId: this.storeId,
             themeId: this.themeId
           }
-        });
+        })
         this.reviews = response.data.data; // 응답에서 데이터 필드 접근
       } catch (error) {
         console.error("리뷰를 가져오는" + "" + "" + " 중 오류 발생:", error);

@@ -16,29 +16,34 @@
 </template>
 
 <script>
-import { axiosConsumer } from "@/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   props: {
     isVisible: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       user: {
         currentPassword: '',
-        newPassword: ''
-      }
+        newPassword: '',
+      },
     };
   },
   methods: {
+    ...mapActions('axios', ['axiosConsumerRequest']),
     async submitProfile() {
       try {
-        await axiosConsumer.put('/users/profile/password', {
-          currentPassword: this.user.currentPassword,
-          newPassword: this.user.newPassword
+        await this.axiosConsumerRequest({
+          method: 'put',
+          url: '/users/profile/password',
+          data: {
+            currentPassword: this.user.currentPassword,
+            newPassword: this.user.newPassword,
+          },
         });
         alert('비밀번호 변경 완료!');
         this.closeModal();
@@ -54,12 +59,12 @@ export default {
     closeModal() {
       this.user = {
         currentPassword: '',
-        newPassword: ''
+        newPassword: '',
       };
       this.$emit('close');
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

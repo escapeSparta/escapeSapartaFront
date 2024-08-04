@@ -15,27 +15,32 @@
 </template>
 
 <script>
-import { axiosConsumer } from "@/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   props: {
     isVisible: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       user: {
-        name: ''
-      }
+        name: '',
+      },
     };
   },
   methods: {
+    ...mapActions('axios', ['axiosConsumerRequest']),
     async submitProfile() {
       try {
-        await axiosConsumer.put('/users/profile', {
-          name: this.user.name
+        await this.axiosConsumerRequest({
+          method: 'put',
+          url: '/users/profile',
+          data: {
+            name: this.user.name,
+          },
         });
         alert('프로필 수정 완료!');
         this.closeModal();
@@ -50,12 +55,12 @@ export default {
     },
     closeModal() {
       this.user = {
-        name: ''
+        name: '',
       };
       this.$emit('close');
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
