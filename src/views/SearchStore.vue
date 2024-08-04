@@ -30,7 +30,7 @@
       </section>
 
       <section class="search-results">
-        <div v-for="result in searchResults" :key="result.storeId" class="theme-card" @click="navigateToTheme(result.storeId)">
+        <div v-for="result in searchResults" :key="result.storeId" class="theme-card" @click="navigateToTheme(result.storeId, result.title)">
           <img :src="result.storeImage ? result.storeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" class="theme-image" width="300" height="200">
           <div class="theme-details">
             <div>
@@ -76,9 +76,9 @@ export default {
           console.log(e);
         });
     },
-    navigateToTheme(storeId) {
+    navigateToTheme(storeId, storeName) {
       console.log(storeId);
-      this.$router.push({ name: 'Theme', params: { storeId: storeId } });
+      this.$router.push({ name: 'Theme', params: { storeId: storeId, storeTitle: storeName } });
     },
     login() {
       alert('로그인 버튼 클릭');

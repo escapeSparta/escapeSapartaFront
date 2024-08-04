@@ -2,7 +2,10 @@
   <div>
     <div class="container">
       <h1>방탈출 예약하기</h1>
-
+      <div class="store-info">
+        <h2>{{ this.storeTitle }}</h2>
+        <button @click="followStore(this.storeId)" class="follow-button">팔로우하기</button>
+      </div>
       <div class="booking-container">
         <div class="theme-list">
           <h2>테마 선택</h2>
@@ -98,8 +101,10 @@ export default {
     };
   },
 
-  props: ['storeId'],
+  props: ['storeId', 'storeTitle'],
   mounted() {
+    console.log(this.storeId);
+    console.log(this.storeTitle);
     apiSearch.getThemes(null, null, null, null, this.storeId)
       .then(response => {
         this.themes = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
@@ -158,7 +163,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('axios', ['axiosReservationRequest']),
+    ...mapActions('axios', ['axiosReservationRequest', 'axiosConsumerRequest']),
     selectTheme(themeId) {
       idid = themeId;
       apiSearch.getThemesInfo(themeId, this.storeId)
@@ -265,6 +270,25 @@ export default {
       }
 
     },
+    async followStore(storeId) {
+      try {
+        console.log(storeId);
+        //예약 정보가 담겨있는 response
+        const response = await this.axiosConsumerRequest({
+          method: 'post',
+          url: `/follow/stores/${storeId}`
+        })
+        console.log(storeId);
+        alert("팔로우가 완료되었습니다!");
+      } catch (error) {
+        let errorMessage = '팔로우 중 오류가 발생했습니다.';
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message;
+        }
+        console.error('Error : ', error);
+        alert(errorMessage);
+      }
+    }
 
   }
 };

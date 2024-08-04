@@ -59,31 +59,39 @@ const setInterceptors = (axiosInstance) => {
         return response;
     }, async error => {
         const originalRequest = error.config;
-        if (error.response && error.response.data.statusCode === 401 && !originalRequest._retry) {
+        if (error.response && error.response.data.statusCode === 900 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            const accessToken = localStorage.getItem('accessToken');
-            const refreshToken = localStorage.getItem('refreshToken');
+            try {
+                const accessToken = localStorage.getItem('accessToken');
+                const refreshToken = localStorage.getItem('refreshToken');
 
-            const response = await axios.post('http://localhost:8080/auth/reissue', {}, {
-                headers: {
-                    'Authorization': accessToken,
-                    'Refreshtoken': refreshToken
-                }
-            });
+                const response = await axios.post('http://localhost:8080/auth/reissue', {}, {
+                    headers: {
+                        'Authorization': accessToken,
+                        'Refreshtoken': refreshToken
+                    }
+                });
 
-            const newAccessToken = response.headers['authorization'];
-            const newRefreshToken = response.headers['refreshtoken'];
+                const newAccessToken = response.headers['authorization'];
+                const newRefreshToken = response.headers['refreshtoken'];
 
-            localStorage.setItem('accessToken', newAccessToken);
-            localStorage.setItem('refreshToken', newRefreshToken);
+                localStorage.setItem('accessToken', newAccessToken);
+                localStorage.setItem('refreshToken', newRefreshToken);
 
-            originalRequest.headers['Authorization'] = `${newAccessToken}`;
-            return axios(originalRequest);
-        } else {
-            // 로그아웃 상태로 변경
+                originalRequest.headers['Authorization'] = `${newAccessToken}`;
+                return axios(originalRequest);
+            } catch (e) {
+                store.dispatch('auth/logout');
+                // 로그인 화면으로 리디렉션
+                window.location.href = '/login';
+            }
+        } else if(error.response && error.response.data.statusCode === 401) {
             store.dispatch('auth/logout');
-            alert("로그인 화면으로 이동합니다.")
+            // 로그인 화면으로 리디렉션
+            window.location.href = '/login';
+        } else if(error.response && error.response.data.statusCode === 500) {
+            store.dispatch('auth/logout');
             // 로그인 화면으로 리디렉션
             window.location.href = '/login';
         }

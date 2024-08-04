@@ -9,7 +9,7 @@
         <p>{{ store.address }}</p>
         <p>전화: {{ store.phoneNumber }}</p>
         <div class="button-group">
-          <button class="button">예약하기</button>
+          <button class="button" @click="goToReservation(store.storeId, store.name)">예약하기</button>
           <button class="button" id="unfollow-button" @click="unfollowStore(store.storeId)">팔로우 취소</button>
         </div>
       </div>
@@ -72,6 +72,9 @@ export default {
         // 사용자가 취소를 클릭했을 때의 처리를 할 수 있습니다. (필요시)
         console.log('팔로우 취소가 취소되었습니다.');
       }
+    },
+    goToReservation(storeId, storeName) {
+      this.$router.push({ name: 'Theme', params: { storeId: storeId, storeTitle: storeName } });
     }
   }
 }
