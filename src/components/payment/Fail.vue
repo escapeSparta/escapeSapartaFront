@@ -8,8 +8,13 @@
 </template>
 
 <script>
+import apiPayment from '@/api/payment.js'
+
 export default {
   name: 'Fail',
+  mounted() {
+    apiPayment.getPaymentFailedURL(this.$route.query.reservationId);
+  },
   methods: {
     goToMainPage() {
       this.$router.push('/');
