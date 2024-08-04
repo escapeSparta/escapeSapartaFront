@@ -2,12 +2,15 @@
   <div>
     <div class="container">
       <h1>방탈출 예약하기</h1>
-
+      <div class="store-info">
+        <h2>{{ this.storeTitle }}</h2>
+        <button @click="followStore(this.storeId)" class="follow-button">팔로우하기</button>
+      </div>
       <div class="booking-container">
         <div class="theme-list">
           <h2>테마 선택</h2>
           <div v-for="theme in themes" :key="theme.themeId" class="theme-item" @click="selectTheme(theme.themeId)">
-            <img class="theme-image" :src="theme.themeImage" :alt="theme.title" width="200" height="200" />
+            <img class="theme-image" :src="theme.themeImage ? theme.themeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" :alt="theme.title" width="200" height="200" />
             <div class="theme-name">{{ theme.title }}</div>
           </div>
         </div>
@@ -15,7 +18,7 @@
         <div class="booking-details">
           <div class="theme-info" v-if="selectedTheme">
             <h3>{{ selectedTheme.title }}</h3>
-            <img :src="selectedTheme.themeImage" :alt="selectedTheme.title" class="theme-info-image" width="600" height="400" />
+            <img :src="selectedTheme.themeImage ? selectedTheme.themeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" :alt="selectedTheme.title" class="theme-info-image" width="600" height="400" />
             <div class="theme-description">{{ selectedTheme.description }}</div>
             <div class="theme-details">
               <span>난이도:</span><span class="difficulty-stars">{{ difficultyStars }}</span>
@@ -25,13 +28,14 @@
               <span>가격:</span><span>{{ selectedTheme.price }}원</span>
             </div>
             <div class="player-selection">
-              <span>인원 선택:</span>
-              <div>
+              <button @click="goToReviews(this.storeId, selectedTheme.themeId)" class="review-button">리뷰 보러 가기</button>
+              <div class="player-selection-text">인원 선택하기:</div>
+              <div class="player-buttons">
                 <button
-                  v-for="n in maxPlayersArray"
-                  :key="n"
-                  @click="selectPlayer(n, selectedTheme.price)"
-                  :class="{ 'selected': player === n }">
+                    v-for="n in maxPlayersArray"
+                    :key="n"
+                    @click="selectPlayer(n, selectedTheme.price)"
+                    :class="{ 'selected': player === n }">
                   {{ n }}인
                 </button>
               </div>
@@ -77,8 +81,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import apiSearch from '@/api/Search.js'
-import {axiosReservation} from "@/axios.js";
 
 var idid = null;
 export default {
@@ -97,8 +101,10 @@ export default {
     };
   },
 
-  props: ['storeId'],
+  props: ['storeId', 'storeTitle'],
   mounted() {
+    console.log(this.storeId);
+    console.log(this.storeTitle);
     apiSearch.getThemes(null, null, null, null, this.storeId)
       .then(response => {
         this.themes = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
@@ -157,6 +163,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('axios', ['axiosReservationRequest', 'axiosConsumerRequest']),
     selectTheme(themeId) {
       idid = themeId;
       apiSearch.getThemesInfo(themeId, this.storeId)
@@ -226,6 +233,9 @@ export default {
       this.player = player;
       this.price = selectedPrice * player;
     },
+    goToReviews(storeId, themeId) {
+      this.$router.push({ path: '/reviews', query: { storeId: storeId, themeId: themeId}})
+    },
     async book(themeTimeId, player, price) {
 
       if (!this.selectedTheme || !this.selectedDate || !this.selectedTime || !this.player) {
@@ -234,11 +244,15 @@ export default {
       }
       try {
         //예약 정보가 담겨있는 response
-        const response = await axiosReservation.post('/reservations', {
-          themeTimeId: themeTimeId,
-          player: player,
-          price: price,
-          paymentStatus: 'PENDING'
+        const response = await this.axiosReservationRequest({
+          method: 'post',
+          url: '/reservations',
+          data: {
+            themeTimeId: themeTimeId,
+            player: player,
+            price: price,
+            paymentStatus: 'PENDING'
+          }
         })
         console.log(response.data.data.totalPrice);
         // this.$router.push({name: 'Reservation', params: {response: response.data.data}});
@@ -250,12 +264,31 @@ export default {
 
         });
         // alert(`예약이 완료되었습니다!\n테마: ${this.selectedTheme.title}\n날짜: ${this.formattedDate}\n시간: ${this.selectedTime}\n인원: ${this.player}인`);
-      }catch(error){
+      } catch(error){
         console.log(error);
         alert(error);
       }
 
     },
+    async followStore(storeId) {
+      try {
+        console.log(storeId);
+        //예약 정보가 담겨있는 response
+        const response = await this.axiosConsumerRequest({
+          method: 'post',
+          url: `/follow/stores/${storeId}`
+        })
+        console.log(storeId);
+        alert("팔로우가 완료되었습니다!");
+      } catch (error) {
+        let errorMessage = '팔로우 중 오류가 발생했습니다.';
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message;
+        }
+        console.error('Error : ', error);
+        alert(errorMessage);
+      }
+    }
 
   }
 };
@@ -348,10 +381,12 @@ h1, h2, h3 {
   box-shadow: 0 0 15px #0f0;
 }
 
-.theme-image {
+.theme-item img {
   width: 100%;
-  height: 200px; /* Increased height */
-  object-fit: cover;
+  height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+  max-height: 200px; /* 이미지 높이를 제한하여 너무 커지지 않도록 설정 */
+  object-fit: contain; /* 이미지의 비율을 유지하면서 영역을 채우도록 설정 */
+  border-radius: 5px;
 }
 
 .theme-name {
@@ -383,10 +418,11 @@ h1, h2, h3 {
 
 .theme-info-image {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 5px;
+  height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+  max-height: 400px; /* 최대 높이를 설정하여 너무 커지지 않도록 설정 */
+  object-fit: contain; /* 이미지의 비율을 유지하면서 영역을 채우도록 설정 */
   margin-bottom: 1rem;
+  border-radius: 5px;
 }
 
 .theme-description {
@@ -533,10 +569,18 @@ button.selected {
 
 .player-selection {
   margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .player-selection button {
   margin: 0.2rem;
+}
+
+.player-selection-text {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #0f0;
 }
 
 .time-slot {

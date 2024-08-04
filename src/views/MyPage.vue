@@ -31,34 +31,20 @@ export default {
 <style scoped>
 .container {
   display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto; /* 컨테이너를 중앙에 위치시킴 */
+
+}
+
+.profile-menu {
+  width: 200px; /* 메뉴의 고정 폭 */
+  flex-shrink: 0; /* 메뉴가 축소되지 않도록 설정 */
 }
 
 .profile-content {
-  flex-grow: 1;
-  background-color: rgba(0, 255, 0, 0.1);
+  flex-grow: 1; /* 남은 공간을 차지하도록 설정 */
   border-radius: 10px;
   padding: 2rem;
-  margin-left: 2rem;
-}
-
-.edit-profile-btn {
-  background-color: #0f0;
-  color: #000;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 1rem;
-}
-
-.edit-profile-btn:hover {
-  background-color: #000;
-  color: #0f0;
-  border: 1px solid #0f0;
+  margin-left: 2rem; /* 메뉴와 컨텐츠 사이의 간격 설정 */
+  min-height: 0;
 }
 </style>

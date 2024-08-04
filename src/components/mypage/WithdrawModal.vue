@@ -15,30 +15,34 @@
 </template>
 
 <script>
-import {axiosCore} from "@/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   props: {
     isVisible: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      password: ''
+      password: '',
     };
   },
   methods: {
+    ...mapActions('axios', ['axiosCoreRequest']),
     closeModal() {
       this.password = '';
       this.$emit('close');
     },
     async deleteAccount() {
       try {
-        // 예약 취소 API 호출
-        await axiosCore.put(`/users/withdraw`, {
-          password: this.password,
+        await this.axiosCoreRequest({
+          method: 'put',
+          url: '/users/withdraw',
+          data: {
+            password: this.password,
+          },
         });
         alert(`회원 탈퇴가 완료되었습니다.`);
         localStorage.removeItem("accessToken");
@@ -50,12 +54,11 @@ export default {
           errorMessage = error.response.data.message;
         }
         console.error('Error Withdraw:', error);
-        // 에러 발생 시 사용자에게 알림
         alert(errorMessage);
       }
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

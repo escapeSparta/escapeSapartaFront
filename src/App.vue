@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import SignUp from './components/signup/SignUp.vue';
-import Header from "./components/Header.vue";
+import SignUp from './components/auth/SignUp.vue';
+import Header from "./views/Header.vue";
 
 export default {
   name: 'App',

@@ -9,7 +9,7 @@
         <p>{{ store.address }}</p>
         <p>전화: {{ store.phoneNumber }}</p>
         <div class="button-group">
-          <button class="button">예약하기</button>
+          <button class="button" @click="goToReservation(store.storeId, store.name)">예약하기</button>
           <button class="button" id="unfollow-button" @click="unfollowStore(store.storeId)">팔로우 취소</button>
         </div>
       </div>
@@ -18,8 +18,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {axiosConsumer} from "@/axios.js";
+import { mapActions } from 'vuex';
 
 export default {
   name: 'FollowInfo',
@@ -32,9 +31,13 @@ export default {
     await this.fetchFollowStores();
   },
   methods: {
+    ...mapActions('axios', ['axiosConsumerRequest']),
     async fetchFollowStores() {
       try {
-        const response = await axiosConsumer.get('/follow/stores');
+        const response = await this.axiosConsumerRequest({
+          method: 'get',
+          url: '/follow/stores'
+        })
         this.stores = response.data.data;
       } catch (error) {
         console.error('Error fetching follow Stores:', error);
@@ -49,7 +52,10 @@ export default {
       if (isConfirmed) {
         try {
           // 예약 취소 API 호출
-          const response = await axiosConsumer.delete(`/follow/stores/${id}`);
+          const response = await this.axiosConsumerRequest({
+            method: 'delete',
+            url: `/follow/stores/${id}`
+          })
 
           // 예약 목록을 업데이트합니다. (예: 취소된 예약을 제외한 예약 목록으로 업데이트)
           this.reservations = response.data.data;
@@ -66,6 +72,9 @@ export default {
         // 사용자가 취소를 클릭했을 때의 처리를 할 수 있습니다. (필요시)
         console.log('팔로우 취소가 취소되었습니다.');
       }
+    },
+    goToReservation(storeId, storeName) {
+      this.$router.push({ name: 'Theme', params: { storeId: storeId, storeTitle: storeName } });
     }
   }
 }
@@ -91,10 +100,18 @@ export default {
 }
 
 .card img {
+  width: 100%;
+  height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
+  max-height: 200px;
   border-radius: 8px;
+  margin-top: 1rem;
+  object-fit: contain;
 }
 
 .button-group {
+  display: flex;
+  justify-content: center; /* 버튼들을 수평으로 가운데 정렬 */
+  gap: 10px; /* 버튼 간의 간격을 조정 */
   margin-top: 10px;
 }
 

@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import apiPayment from '@/api/payment.js';
+// import apiPayment from '@/api/payment.js';
+import { mapActions } from "vuex";
 
 export default {
   name: 'BookingForm',
@@ -51,6 +52,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('axios', ['axiosReservationRequest']),
     // selectPlayers(players) {
     //   this.selectedPlayers = players;
     // },
@@ -69,7 +71,11 @@ export default {
 
       try {
         // console.log(this.$route.query.reservationId);
-        const response = await apiPayment.postReservationForPay(this.$route.query.reservationId);
+        const response = await this.axiosReservationRequest({
+          method: 'post',
+          url: `/payments/reservations/${this.$route.query.reservationId}`
+        })
+
         console.log(response)
         const nextRedirectPcUrl = response.data;
         console.log(nextRedirectPcUrl)

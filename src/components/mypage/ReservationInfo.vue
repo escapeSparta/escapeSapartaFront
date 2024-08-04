@@ -4,7 +4,7 @@
     <p>총 예약 건수: {{ reservations.length }}건</p>
     <div class="reservation-list">
       <div v-for="reservation in reservations" :key="reservation.reservationId" class="reservation-item">
-        <img :src="reservation.storeImage ? reservation.storeImage : 'https://b13-escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Store image" class="reservation-image" />
+        <img :src="reservation.storeImage ? reservation.storeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Store image" class="reservation-image" />
         <div class="reservation-details">
           <h3>{{ reservation.themeTitle }}</h3>
           <p><strong>예약일:</strong> {{ formatDate(reservation.startTime) }}</p>
@@ -42,8 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {axiosReservation} from "@/axios.js";
+import { mapActions } from 'vuex';
 import ReviewModal from "@/components/mypage/ReviewModal.vue";
 
 export default {
@@ -51,23 +50,27 @@ export default {
   components: {
     ReviewModal
   },
-  data() { // 컴포넌트의 초기 데이터 상태 정의
+  data() {
     return {
       isModalVisible: false,
       selectedStoreName: '',
       selectedThemeName: '',
       selectedReservationId: 0,
-      reservations: [], // 예약 내역 배열
+      reservations: []
     };
   },
-  async created() { // 컴포넌트가 생성된 후 호출
+  async created() {
     await this.fetchReservations();
   },
-  methods: { // 컴포넌트의 메서드 정의
+  methods: {
+    ...mapActions('axios', ['axiosReservationRequest']),
     async fetchReservations() {
       try {
-        const response = await axiosReservation.get('/reservations'); // 예약 내역을 가져오는 API 호출
-        this.reservations = response.data.data; // API 응답 데이터
+        const response = await this.axiosReservationRequest({
+          method: 'get',
+          url: '/reservations'
+        })
+        this.reservations = response.data.data;
       } catch (error) {
         console.error('Error fetching reservations:', error);
       }
@@ -96,28 +99,20 @@ export default {
       }
     },
     async cancelReservation(id) {
-      // 사용자에게 확인 팝업을 표시합니다.
       const isConfirmed = confirm(`정말로 예약을 취소하시겠습니까?`);
-
-      // 사용자가 확인을 클릭한 경우에만 API를 호출합니다.
       if (isConfirmed) {
         try {
-          // 예약 취소 API 호출
-          const response = await axiosReservation.delete(`/reservations/${id}`);
-
-          // 예약 목록을 업데이트합니다. (예: 취소된 예약을 제외한 예약 목록으로 업데이트)
-          this.reservations = response.data.data;
-
-          // 취소 완료 알림
+          await this.axiosReservationRequest({
+            method: 'delete',
+            url: `/reservations/${id}`
+          })
           alert(`예약이(가) 취소되었습니다.`);
           await this.fetchReservations();
         } catch (error) {
           console.error('Error cancelling reservation:', error);
-          // 에러 발생 시 사용자에게 알림
           alert('예약 취소 중 오류가 발생했습니다.');
         }
       } else {
-        // 사용자가 취소를 클릭했을 때의 처리를 할 수 있습니다. (필요시)
         console.log('예약 취소가 취소되었습니다.');
       }
     },
@@ -137,12 +132,9 @@ export default {
 };
 </script>
 <style scoped>
-.reservations {
-  padding: 2rem;
-}
-
 .reservation-list {
   padding-left: 15px; /* 왼쪽 패딩 추가 */
+  padding-right: 15px; /* 왼쪽 패딩 추가 */
 }
 
 .reservation-item {
@@ -159,7 +151,7 @@ export default {
   width: 14rem;
   height: 10rem;
   border-radius: 8px;
-  object-fit: cover;
+  object-fit: contain;
   margin-right: 1rem;
 }
 
