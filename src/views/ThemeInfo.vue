@@ -361,7 +361,8 @@ h1, h2, h3 {
   width: 100%;
   height: auto; /* 높이를 자동으로 조정하여 비율 유지 */
   max-height: 200px; /* 이미지 높이를 제한하여 너무 커지지 않도록 설정 */
-  object-fit: contain /* 이미지의 비율을 유지하면서 영역을 채우도록 설정 */
+  object-fit: contain; /* 이미지의 비율을 유지하면서 영역을 채우도록 설정 */
+  border-radius: 5px;
 }
 
 .theme-name {
@@ -397,6 +398,7 @@ h1, h2, h3 {
   max-height: 400px; /* 최대 높이를 설정하여 너무 커지지 않도록 설정 */
   object-fit: contain; /* 이미지의 비율을 유지하면서 영역을 채우도록 설정 */
   margin-bottom: 1rem;
+  border-radius: 5px;
 }
 
 .theme-description {
