@@ -7,7 +7,9 @@
       <h3>Payment Method:</h3>
       <div class="button-group" id="payment-group">
         <button type="button" class="selection-button" v-for="method in paymentMethods" :key="method"
-                @click="selectPayment(method)">
+                @click="selectPayment(method)"
+                :class="{ selected: selectedPayment === method }">
+
           {{ methodNames[method] }}
         </button>
       </div>
@@ -87,3 +89,20 @@ export default {
   }
 }
 </script>
+<style>
+.booking-form {
+  width: 40%;
+}
+.selection-button {
+  padding: 10px 20px;
+  background-color: #001100;
+  color: #0f0;
+  border: 1px solid #0f0;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+.selection-button:hover, .selection-button.selected {
+  background-color: #0f0;
+  color: #000;
+}
+</style>

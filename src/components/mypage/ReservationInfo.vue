@@ -4,7 +4,7 @@
     <p>총 예약 건수: {{ reservations.length }}건</p>
     <div class="reservation-list">
       <div v-for="reservation in reservations" :key="reservation.reservationId" class="reservation-item">
-        <img :src="reservation.storeImage ? reservation.storeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Store image" class="reservation-image" />
+        <img :src="reservation.themeImage ? reservation.themeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" alt="Store image" class="reservation-image" />
         <div class="reservation-details">
           <h3>{{ reservation.themeTitle }}</h3>
           <p><strong>예약일:</strong> {{ formatDate(reservation.startTime) }}</p>

@@ -8,7 +8,7 @@
     <p><strong>날짜시간:</strong> {{ $route.query.startTime }}</p>
     <p><strong>인원:</strong> {{ $route.query.player }}</p>
     <p><strong>플레이타임:</strong> {{ $route.query.duration }} 분</p>
-    <p><strong>이미지:</strong> <img :src="$route.query.themeImage" alt="theme image" /></p>
+<!--    <p><strong>이미지:</strong> <img :src="$route.query.themeImage" alt="theme image" /></p>-->
     <p><strong>예약시간:</strong> {{ $route.query.createAt }}</p>
     <p><strong>총가격:</strong> {{ $route.query.totalPrice }}</p>
   </div>
@@ -20,3 +20,12 @@ export default {
   name: 'BookingInfo',
 }
 </script>
+<style>
+.booking-info {
+  background-color: #002200;
+  width: 40%;
+  padding: 2rem;
+  border-radius: 5px;
+}
+
+</style>
