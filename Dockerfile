@@ -19,11 +19,11 @@ COPY . .
 FROM nginx:stable-alpine
 
 # 8. Nginx 설정 파일 복사
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 # 9. 빌드된 파일들을 Nginx 웹 루트로 복사
 #COPY --from=build-stage /app/dist /usr/share/nginx/html
-COPY /build/dist /usr/share/nginx/html
+COPY --from=build-stage /build/dist /usr/share/nginx/html
 
 # 10. Nginx 서버 시작
 EXPOSE 80
