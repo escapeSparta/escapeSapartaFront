@@ -1,7 +1,7 @@
 FROM node:20.15.1 AS build-stage
 
 # 2. 작업 디렉토리 설정
-WORKDIR /app
+WORKDIR /build
 
 # 3. package.json과 package-lock.json을 복사
 COPY package*.json ./
@@ -13,16 +13,17 @@ RUN npm install
 COPY . .
 
 # 6. Vue 애플리케이션 빌드
-RUN npm run build
+#RUN npm run build
 
 # 7. Nginx를 사용하여 서빙 단계
 FROM nginx:stable-alpine
 
 # 8. Nginx 설정 파일 복사
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 # 9. 빌드된 파일들을 Nginx 웹 루트로 복사
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+#COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /build/dist /usr/share/nginx/html
 
 # 10. Nginx 서버 시작
 EXPOSE 80

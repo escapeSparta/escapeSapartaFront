@@ -4,7 +4,6 @@ import { fileURLToPath, URL } from 'node:url'
 
 
 export default defineConfig({
-  base: '/escapeSpartaFront/', // publicPath에 해당하는 설정
   plugins: [vue()],
   resolve: {
     alias: {
