@@ -30,8 +30,8 @@ jobs:
 
       - name: Build and push escape-frontend Docker image
         run: |
-          docker build -t escapesparta/escape-frontend:latest .
-          docker push escapesparta/escape-frontend:latest
+          docker build -t semmmi/escape-frontend:latest .
+          docker push semmmi/escape-frontend:latest
           
       - name: Deploy to Vercel
         env:
