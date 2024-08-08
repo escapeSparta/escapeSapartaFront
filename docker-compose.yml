@@ -8,21 +8,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:80"
-    depends_on:
-      - escape-core
-      - escape-admin
-      - escape-consumer
-      - escape-manager
-      - escape-reservation
-      - escape-search
-    environment:
-      ESCAPE_CORE_URL: http://escape-core:8080
-      ESCAPE_ADMIN_URL: http://escape-admin:8081
-      ESCAPE_CONSUMER_URL: http://escape-consumer:8082
-      ESCAPE_MANAGER_URL: http://escape-manager:8083
-      ESCAPE_RESERVATION_URL: http://escape-reservation:8084
-      ESCAPE_SEARCH_URL: http://escape-search:8085
-
-networks:
-  app-network:
-    driver: bridge
