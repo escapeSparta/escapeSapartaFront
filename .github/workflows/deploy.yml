@@ -32,10 +32,11 @@ jobs:
         run: |
           docker build -t semmmi/escape-frontend:latest .
           docker push semmmi/escape-frontend:latest
-          
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID :  ${{ secrets.VERCEL_ORG_ID }}
           VUE_APP_CORE_API_URL: ${{ secrets.VUE_APP_CORE_API_URL }}
           VUE_APP_ADMIN_API_URL: ${{ secrets.VUE_APP_ADMIN_API_URL }}
           VUE_APP_MANAGER_API_URL: ${{ secrets.VUE_APP_MANAGER_API_URL }}
@@ -43,7 +44,7 @@ jobs:
           VUE_APP_RESERVATION_API_URL: ${{ secrets.VUE_APP_RESERVATION_API_URL }}
           VUE_APP_SEARCH_API_URL: ${{ secrets.VUE_APP_SEARCH_API_URL }}
         run: |
-          npx vercel --prod --confirm --env VUE_APP_CORE_API_URL=$VUE_APP_CORE_API_URL --env VUE_APP_ADMIN_API_URL=$VUE_APP_ADMIN_API_URL --env VUE_APP_MANAGER_API_URL=$VUE_APP_MANAGER_API_URL --env VUE_APP_CONSUMER_API_URL=$VUE_APP_CONSUMER_API_URL --env VUE_APP_RESERVATION_API_URL=$VUE_APP_RESERVATION_API_URL --env VUE_APP_SEARCH_API_URL=$VUE_APP_SEARCH_API_URL
+          npx vercel --prod --yes --env VUE_APP_CORE_API_URL=$VUE_APP_CORE_API_URL --env VUE_APP_ADMIN_API_URL=$VUE_APP_ADMIN_API_URL --env VUE_APP_MANAGER_API_URL=$VUE_APP_MANAGER_API_URL --env VUE_APP_CONSUMER_API_URL=$VUE_APP_CONSUMER_API_URL --env VUE_APP_RESERVATION_API_URL=$VUE_APP_RESERVATION_API_URL --env VUE_APP_SEARCH_API_URL=$VUE_APP_SEARCH_API_URL
 
 
       - name: Install Vercel CLI
