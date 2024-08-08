@@ -1,44 +1,55 @@
 // src/store/axios.js
 import axios from 'axios';
 import store from '@/store';
+import process from "eslint-plugin-vue/lib/configs/base.js";
+
+// Environment variables
+
+const coreApiUrl = process.env.VUE_APP_CORE_API_URL || 'http://localhost:8080';
+const adminApiUrl = process.env.VUE_APP_ADMIN_API_URL || 'http://localhost:8081';
+const managerApiUrl = process.env.VUE_APP_MANAGER_API_URL || 'http://localhost:8082';
+const consumerApiUrl = process.env.VUE_APP_CONSUMER_API_URL || 'http://localhost:8083';
+const reservationApiUrl = process.env.VUE_APP_RESERVATION_API_URL || 'http://localhost:8084';
+const searchApiUrl = process.env.VUE_APP_SEARCH_API_URL || 'http://localhost:8085';
+
 
 const axiosSearch = axios.create({
-    baseURL: 'http://localhost:8085',
+    baseURL: searchApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
 })
 
 const axiosCore = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: coreApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosAdmin = axios.create({
-    baseURL: 'http://localhost:8081',
+    baseURL: adminApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosManager = axios.create({
-    baseURL: 'http://localhost:8082',
+    baseURL: managerApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosReservation = axios.create({
-    baseURL: 'http://localhost:8084',
+    baseURL: reservationApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosConsumer = axios.create({
-    baseURL: 'http://localhost:8083',
+    baseURL: consumerApiUrl,
     headers: {
         'Content-Type': 'application/json'
     }
