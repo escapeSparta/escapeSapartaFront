@@ -7,7 +7,7 @@ export default {
     return axios.get(BASE_URL + `search/stores`, {
       params:{
         pageNum: pageNum,
-        pageSize: pageSize,
+        pageSize: 9,
         isDesc: isDesc,
         keyWord: keyWord,
         storeRegion: storeRegion,

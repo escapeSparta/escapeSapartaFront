@@ -40,6 +40,17 @@
           </div>
         </div>
       </section>
+      <section class="pagination">
+        <button @click="changePage(pageNum - 1)" :disabled="pageNum === 1">이전</button>
+
+        <span v-for="page in pagesToShow" :key="page">
+    <span @click="changePage(page)" :class="{ active: page === pageNum, pageText: true }">
+      {{ page }}
+    </span>
+  </span>
+
+        <button @click="changePage(pageNum + 1)" :disabled="pageNum === totalPages">다음</button>
+      </section>
     </div>
   </div>
 </template>
@@ -52,25 +63,45 @@ export default {
     return {
       keyWord: '',
       storeRegion: 'ALL',
-      searchResults: []
+      searchResults: [],
+      pageNum: 1,
+      pageSize: 9,
+      totalPages: '',
+      pageRange: 5
     }
   },
   mounted() {
     apiSearch.getStores()
       .then(response => {
         this.searchResults = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
+        this.totalPages = response.data.data.totalPages;
       })
       .catch(e => {
         console.log(e);
       });
   },
+  computed: {
+    // 현재 페이지와 페이지 범위를 기반으로 표시할 페이지 목록 계산
+    pagesToShow() {
+      const startPage = Math.max(1, this.pageNum - Math.floor(this.pageRange / 2));
+      const endPage = Math.min(this.totalPages, startPage + this.pageRange - 1);
+      const pages = [];
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+
+      return pages;
+    }
+  },
   methods: {
     searchEscapeRooms() {
       console.log(this.storeRegion);
-      apiSearch.getStores(null, null, null, this.keyWord, this.storeRegion, null)
+      apiSearch.getStores(this.pageNum, this.pageSize, null, this.keyWord, this.storeRegion, null)
         .then(response => {
           console.log(response);
           this.searchResults = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
+          this.totalPages = response.data.data.totalPages;
         })
         .catch(e => {
           console.log(e);
@@ -84,9 +115,11 @@ export default {
       alert('로그인 버튼 클릭');
       // 로그인 로직을 여기에 추가하세요.
     },
-    signup() {
-      alert('회원가입 버튼 클릭');
-      // 회원가입 로직을 여기에 추가하세요.
+    changePage(page) {
+      if (page > 0 && page <= this.totalPages) {
+        this.pageNum = page;
+        this.searchEscapeRooms();
+      }
     }
   }
 }
@@ -203,36 +236,20 @@ button:hover {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
-.theme-location, .theme-genre, .theme-difficulty {
-  font-size: 0.9rem;
-  margin-bottom: 0.3rem;
-}
-.theme-rating {
+.pagination {
   display: flex;
+  justify-content: center; /* 가로 가운데 정렬 */
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-top: 2rem;
 }
-.star {
-  color: #ff0;
-  font-size: 1.2rem;
-  margin-right: 0.2rem;
-}
-.book-button {
-  background-color: #0f0;
-  color: #000;
-  border: none;
-  padding: 0.5rem 1rem;
+.pagination span.pageText {
   cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 5px;
-  font-size: 1rem;
-  text-align: center;
-  text-decoration: none;
-  display: block;
+  padding: 0.5rem;
+  color: white; /* 다른 페이지는 흰색 */
 }
-.book-button:hover {
-  background-color: #000;
-  color: #0f0;
-  border: 1px solid #0f0;
+
+.pagination span.active {
+  color: #00ff00; /* 현재 페이지는 형광색 */
+  font-weight: bold;
 }
 </style>
