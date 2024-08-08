@@ -26,21 +26,38 @@ jobs:
         run: npm run build
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_ID }}" --password-stdin
 
       - name: Build and push escape-frontend Docker image
         run: |
           docker build -t escapesparta/escape-frontend:latest .
           docker push escapesparta/escape-frontend:latest
 
-      # Deploy to EC2
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v0.1.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd /path/to/escapesparta-b13
-            docker-compose pull
-            docker-compose up -d
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Copy files via SSH
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "./docker-compose.yml"  # Adjust the path if necessary
+        target: "/home/ec2-user/app"
+
+    - name: Execute remote command via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd /home/ec2-user/app
+          docker-compose pull
+          docker-compose up -d --build
+

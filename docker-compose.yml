@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  escape-frontend:
+    image: escapesparta/escape-frontend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - escape-core
+      - escape-admin
+      - escape-consumer
+      - escape-manager
+      - escape-reservation
+      - escape-search
+#    environment:
+#      ESCAPE_CORE_URL: http://localhost:8080
+#      ESCAPE_ADMIN_URL: http://localhost:8081
+#      ESCAPE_CONSUMER_URL: http://localhost:8082
+#      ESCAPE_MANAGER_URL: http://localhost:8083
+#      ESCAPE_RESERVATION_URL: http://localhost:8084
+#      ESCAPE_SEARCH_URL: http://localhost:8085
+
+networks:
+  app-network:
+    driver: bridge
