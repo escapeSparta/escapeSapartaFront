@@ -33,6 +33,9 @@ jobs:
           docker build -t semmmi/escape-frontend:latest .
           docker push semmmi/escape-frontend:latest
 
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -48,8 +51,7 @@ jobs:
           npx vercel --prod --yes --env VUE_APP_CORE_API_URL=$VUE_APP_CORE_API_URL --env VUE_APP_ADMIN_API_URL=$VUE_APP_ADMIN_API_URL --env VUE_APP_MANAGER_API_URL=$VUE_APP_MANAGER_API_URL --env VUE_APP_CONSUMER_API_URL=$VUE_APP_CONSUMER_API_URL --env VUE_APP_RESERVATION_API_URL=$VUE_APP_RESERVATION_API_URL --env VUE_APP_SEARCH_API_URL=$VUE_APP_SEARCH_API_URL
 
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+      
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
