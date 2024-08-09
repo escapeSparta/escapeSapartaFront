@@ -41,7 +41,7 @@ jobs:
 
       - name: Set Vercel Environment Variables
         run: |
-          curl -X PATCH https://api.vercel.com/v9/projects/${{ secrets.VERCEL_PROJECT_ID }}/env \
+          curl -X PATCH https://vercel.com/tpal0719s-projects/${{ secrets.VERCEL_PROJECT_ID }}/env \
           -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
           -H "Content-Type: application/json" \
           -d '[
