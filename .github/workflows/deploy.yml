@@ -1,5 +1,13 @@
 name: Deploy Frontend
-
+env:
+  VERCEL_ORG_ID : ${{ secret.VERCEL_ORG_ID}}
+  VERCEL_PROJECT_ID : ${{ secret.VERCEL_PROJECT_ID}}
+  VUE_APP_CORE_API_URL : ${{ secret.VUE_APP_CORE_API_URL}}
+  VUE_APP_ADMIN_API_URL  : ${{ secret.VUE_APP_ADMIN_API_URL}}
+  VUE_APP_MANAGER_API_URL  : ${{ secret.VUE_APP_MANAGER_API_URL}}
+  VUE_APP_CONSUMER_API_URL  : ${{ secret.VUE_APP_CONSUMER_API_URL}}
+  VUE_APP_RESERVATION_API_URL  : ${{ secret.VUE_APP_RESERVATION_API_URL}}
+  VUE_APP_SEARCH_API_URL  : ${{ secret.VUE_APP_SEARCH_API_URL}}
 on:
   pull_request:
     branches:
@@ -9,10 +17,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -38,45 +45,6 @@ jobs:
 
       - name: Deploy to Vercel
         run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
-
-      - name: Set Vercel Environment Variables
-        run: |
-          curl -X PATCH https://vercel.com/tpal0719s-projects/${{ secrets.VERCEL_PROJECT_ID }}/env \
-          -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '[
-            {
-              "key": "VUE_APP_CORE_API_URL",
-              "value": "'"${{ secrets.VUE_APP_CORE_API_URL }}"'",
-              "target": ["production", "preview"]
-            },
-            {
-              "key": "VUE_APP_ADMIN_API_URL",
-              "value": "'"${{ secrets.VUE_APP_ADMIN_API_URL }}"'",
-              "target": ["production", "preview"]
-            },
-            {
-              "key": "VUE_APP_MANAGER_API_URL",
-              "value": "'"${{ secrets.VUE_APP_MANAGER_API_URL }}"'",
-              "target": ["production", "preview"]
-            },
-            {
-              "key": "VUE_APP_CONSUMER_API_URL",
-              "value": "'"${{ secrets.VUE_APP_CONSUMER_API_URL }}"'",
-              "target": ["production", "preview"]
-            },
-            {
-              "key": "VUE_APP_RESERVATION_API_URL",
-              "value": "'"${{ secrets.VUE_APP_RESERVATION_API_URL }}"'",
-              "target": ["production", "preview"]
-            },
-            {
-              "key": "VUE_APP_SEARCH_API_URL",
-              "value": "'"${{ secrets.VUE_APP_SEARCH_API_URL }}"'",
-              "target": ["production", "preview"]
-            }
-          ]'
-
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
