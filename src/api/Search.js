@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = "http://localhost:8085/"
+const BASE_URL = import.meta.env.VITE_APP_SEARCH_API_URL || 'http://localhost:8085';
 
 export default {
   getStores: function(pageNum, pageSize, isDesc, keyWord, storeRegion, sort){
