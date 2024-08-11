@@ -39,7 +39,6 @@ export default {
       return !!token; // token이 null, undefined, 빈 문자열이 아니면 true 반환
     }},
     created() {
-      console.log('VITE_APP_CORE_API_URL:', import.meta.env.VITE_APP_CORE_API_URL);
 
     if (this.hasAccessToken()) {
       this.$store.commit('auth/SET_LOGIN_STATE', {
