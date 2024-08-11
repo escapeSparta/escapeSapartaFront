@@ -1,0 +1,33 @@
+name: Deploy Frontend
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
+          VUE_APP_CORE_API_URL: ${{ secrets.VUE_APP_CORE_API_URL}}
+          VUE_APP_ADMIN_API_URL: ${{ secrets.VUE_APP_ADMIN_API_URL}}
+          VUE_APP_MANAGER_API_URL: ${{ secrets.VUE_APP_MANAGER_API_URL}}
+          VUE_APP_CONSUMER_API_URL: ${{ secrets.VUE_APP_CONSUMER_API_URL}}
+          VUE_APP_RESERVATION_API_URL: ${{ secrets.VUE_APP_RESERVATION_API_URL}}
+          VUE_APP_SEARCH_API_URL: ${{ secrets.VUE_APP_SEARCH_API_URL}}
