@@ -21,40 +21,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check Node v
-        run: node -v
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install commonjs
-        run: npm install @rollup/plugin-commonjs --save-dev
-
-      - name: Build the project
-        run: npm run build
-
-      - name: Build the project (use Docker)
-        run: docker build -t semmmi/escape-frontend:latest .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_ID }}" --password-stdin
 
-      - name: Build and push escape-frontend Docker image
+      - name: Build and push Docker images with Docker Compose
         run: |
-          docker build -t semmmi/escape-frontend:latest .
-          docker push semmmi/escape-frontend:latest
+          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.yml push
 
-      - name: Install Vercel CLI
+      - name: Deploy with Docker Compose
+        run: docker-compose -f docker-compose.yml up -d
+
+      - name: Install Vercel CLI (Optional if using Vercel)
         run: npm install --global vercel@latest
 
-      - name: Deploy to Vercel
+      - name: Deploy to Vercel (Optional if using Vercel)
         run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
-
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
