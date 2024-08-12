@@ -38,6 +38,9 @@ export default {
         // console.log(response)
       } catch (error) {
         console.error('API 요청 중 오류가 발생했습니다:', error);
+        this.$router.push({
+          name: 'payFail',
+        });
       }
     } else {
       console.warn('tid가 존재하지 않습니다.');
