@@ -28,24 +28,6 @@ export default {
 </script>
 
 <style>
-body {
-  background-color: #000;
-  color: #0f0;
-  font-family: 'Courier New', monospace;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-header {
-  background-color: #001100;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .user-actions a {
   color: #0f0;
   text-decoration: none;
@@ -56,14 +38,14 @@ main {
   flex-grow: 1;
   padding: 50px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 중앙 정렬 */
   align-items: flex-start;
 }
-.booking-box, .right-column {
-  width: 200%;
+.booking-box {
+  width: 80%; /* 너비 조정 */
   display: flex;
-  justify-content: center;
-
+  justify-content: center; /* 간격 추가 */
+  gap: 5rem; /* BookingInfo와 BookingForm 사이에 간격 추가 */
 }
 
 h1, h2, h3 {
