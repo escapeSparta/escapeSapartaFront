@@ -20,7 +20,10 @@ jobs:
             node-version: '16'  # Vue 프로젝트에 맞는 Node.js 버전
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm cache clean --force
+          npm update
+          npm install
 
       - name: Build the project
         run: npm run build
