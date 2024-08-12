@@ -41,10 +41,26 @@ jobs:
         run: |
             echo "Listing contents of /tmp/vue-app:"
             ls -al /tmp/vue-app
+      - name: Add SSH key and set up known_hosts
+        run: |
+          echo "${{ secrets.EC2_FRONT_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_FRONT_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
-          scp -r /tmp/vue-app/* ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }}:/home/ubuntu/vue-app/
+          BUILD_DIR=/home/ubuntu/vue-app
+
+          # Clean up old build on EC2
+          ssh -i ${{ secrets.EC2_FRONT_KEY }} ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }} << 'EOF'
+            rm -rf $BUILD_DIR
+            mkdir -p $BUILD_DIR
+          EOF
+
+          # Upload new build artifacts to EC2
+          scp -r /tmp/vue-app/* ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }}:$BUILD_DIR/
+
+          # Restart web server (Nginx) on EC2
           ssh -i ${{ secrets.EC2_FRONT_KEY }} ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }} << 'EOF'
             sudo systemctl restart nginx
           EOF
