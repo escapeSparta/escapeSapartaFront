@@ -41,11 +41,6 @@ jobs:
         run: |
             echo "Listing contents of /tmp/vue-app:"
             ls -al /tmp/vue-app
-      - name: Add SSH key and set up known_hosts
-        run: |
-          echo "${{ secrets.EC2_FRONT_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_FRONT_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
