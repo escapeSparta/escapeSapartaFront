@@ -37,6 +37,11 @@ jobs:
           name: build
           path: /tmp/vue-app
 
+      - name: Verify downloaded artifacts
+        run: |
+            echo "Listing contents of /tmp/vue-app:"
+            ls -al /tmp/vue-app
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
