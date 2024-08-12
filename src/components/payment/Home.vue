@@ -33,8 +33,8 @@ export default {
             tid : tid
           }// 올바른 쿼리 파라미터 사용
         });
-        localStorage.removeItem('tid'); // 성공적으로 요청 후 tid 삭제
-        localStorage.removeItem('reservationId'); // 성공적으로 요청 후 reservationId 삭제
+        // localStorage.removeItem('tid'); // 성공적으로 요청 후 tid 삭제
+        // localStorage.removeItem('reservationId'); // 성공적으로 요청 후 reservationId 삭제
         // console.log(response)
       } catch (error) {
         console.error('API 요청 중 오류가 발생했습니다:', error);

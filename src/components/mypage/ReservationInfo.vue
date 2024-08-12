@@ -90,9 +90,9 @@ export default {
       return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
     getReservationStatusText(status) {
-      if (status === 'ACTIVE') {
+      if (status === 'COMPLETE') {
         return '예약 완료';
-      } else if (status === 'DEACTIVE') {
+      } else if (status === 'CANCEL') {
         return '예약 취소';
       } else {
         return '알 수 없는 상태';
@@ -117,7 +117,7 @@ export default {
       }
     },
     isDeactive(status) {
-      return status === 'DEACTIVE';
+      return status === 'CANCEL';
     },
     openReviewModal(id, storeName, themeName) {
       this.selectedReservationId = id;
