@@ -44,19 +44,22 @@ jobs:
 
       - name: Deploy to EC2
         run: |
+          echo "${{ secrets.EC2_FRONT_KEY }}" | tr -d '\r' > ~/ec2_key.pem 
+          chmod 600 ~/ec2_key.pem
+          
           BUILD_DIR=/home/ubuntu/vue-app
 
           # Clean up old build on EC2
-          ssh -i ${{ secrets.EC2_FRONT_KEY }} ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/ec2_key.pem ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }} << 'EOF'
             rm -rf $BUILD_DIR
             mkdir -p $BUILD_DIR
           EOF
 
           # Upload new build artifacts to EC2
-          scp -r /tmp/vue-app/* ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }}:$BUILD_DIR/
+          scp -o StrictHostKeyChecking=no -i ~/ec2_key.pem -r /tmp/vue-app/* ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }}:$BUILD_DIR/
 
           # Restart web server (Nginx) on EC2
-          ssh -i ${{ secrets.EC2_FRONT_KEY }} ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/ec2_key.pem ${{ secrets.EC2_FRONT_USER }}@${{ secrets.EC2_FRONT_HOST }} << 'EOF'
             sudo systemctl restart nginx
           EOF
 
