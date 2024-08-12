@@ -19,15 +19,6 @@ const consumerApiUrl = domain + '/consumer';
 const reservationApiUrl = domain + '/reservations';
 const searchApiUrl = domain + '/search';
 
-
-const coreApiUrl = import.meta.env.VITE_APP_CORE_API_URL || 'http://localhost:8080';
-const adminApiUrl = import.meta.env.VITE_APP_ADMIN_API_URL || 'http://localhost:8081';
-const managerApiUrl = import.meta.env.VITE_APP_MANAGER_API_URL || 'http://localhost:8082';
-const consumerApiUrl = import.meta.env.VITE_APP_CONSUMER_API_URL || 'http://localhost:8083';
-const reservationApiUrl = import.meta.env.VITE_APP_RESERVATION_API_URL || 'http://localhost:8084';
-const searchApiUrl = import.meta.env.VITE_APP_SEARCH_API_URL || 'http://localhost:8085';
-
-
 const axiosSearch = axios.create({
     baseURL: searchApiUrl,
     headers: {
