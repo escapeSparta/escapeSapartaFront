@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-            node-version: '16'  # Vue 프로젝트에 맞는 Node.js 버전
+          node-version: '20'  # Vue 프로젝트에 맞는 Node.js 버전
 
       - name: Install dependencies
         run: npm install
@@ -39,17 +39,17 @@ jobs:
 
       - name: Verify downloaded artifacts
         run: |
-            echo "Listing contents of /tmp/vue-app:"
-            ls -al /tmp/vue-app
+          echo "Listing contents of /tmp/vue-app:"
+          ls -al /tmp/vue-app
 
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v0.1.6
         with:
-           host: ${{ secrets.EC2_HOST }}
-           username: ${{ secrets.EC2_USER }}
-           key: ${{ secrets.EC2_SSH_KEY }}
-           port: 22
-           script: |
-             rm -rf /var/www/html/*
-             scp -r dist/* /var/www/html/
-             sudo systemctl restart nginx
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            rm -rf /var/www/html/*
+            cp -r /tmp/vue-app/* /var/www/html/
+            sudo systemctl restart nginx
