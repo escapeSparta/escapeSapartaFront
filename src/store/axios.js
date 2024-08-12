@@ -5,19 +5,19 @@ import process from "eslint-plugin-vue/lib/configs/base.js";
 
 // Environment variables
 const domain = 'https://www.escapesparta.store'
-// const coreApiUrl = process.env.VUE_APP_CORE_API_URL || 'http://localhost:8080';
-// const adminApiUrl = process.env.VUE_APP_ADMIN_API_URL || 'http://localhost:8081';
-// const managerApiUrl = process.env.VUE_APP_MANAGER_API_URL || 'http://localhost:8082';
-// const consumerApiUrl = process.env.VUE_APP_CONSUMER_API_URL || 'http://localhost:8083';
-// const reservationApiUrl = process.env.VUE_APP_RESERVATION_API_URL || 'http://localhost:8084';
-// const searchApiUrl = process.env.VUE_APP_SEARCH_API_URL || 'http://localhost:8085';
+const coreApiUrl = process.env.VUE_APP_CORE_API_URL || 'http://localhost:8080/core';
+const adminApiUrl = process.env.VUE_APP_ADMIN_API_URL || 'http://localhost:8081/admin';
+const managerApiUrl = process.env.VUE_APP_MANAGER_API_URL || 'http://localhost:8082/manager';
+const consumerApiUrl = process.env.VUE_APP_CONSUMER_API_URL || 'http://localhost:8083/consumer';
+const reservationApiUrl = process.env.VUE_APP_RESERVATION_API_URL || 'http://localhost:8084/reservations';
+const searchApiUrl = process.env.VUE_APP_SEARCH_API_URL || 'http://localhost:8085/search';
 
-const coreApiUrl = domain + '/core';
-const adminApiUrl = domain + '/admin';
-const managerApiUrl = domain + '/manager';
-const consumerApiUrl = domain + '/consumer';
-const reservationApiUrl = domain + '/reservations';
-const searchApiUrl = domain + '/search';
+// const coreApiUrl = domain + '/core';
+// const adminApiUrl = domain + '/admin';
+// const managerApiUrl = domain + '/manager';
+// const consumerApiUrl = domain + '/consumer';
+// const reservationApiUrl = domain + '/reservations';
+// const searchApiUrl = domain + '/search';
 
 const axiosSearch = axios.create({
     baseURL: searchApiUrl,
@@ -83,7 +83,7 @@ const setInterceptors = (axiosInstance) => {
                 const accessToken = localStorage.getItem('accessToken');
                 const refreshToken = localStorage.getItem('refreshToken');
 
-                const response = await axios.post(domain + '/core/auth/reissue', {}, {
+                const response = await axios.post( 'localhost:8080/core/auth/reissue', {}, {
                     headers: {
                         'Authorization': accessToken,
                         'Refreshtoken': refreshToken
