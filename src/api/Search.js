@@ -1,7 +1,6 @@
 import axios from 'axios'
-import process from "eslint-plugin-vue/lib/configs/base.js";
 
-const BASE_URL = process.env.VUE_APP_SEARCH_API_URL;
+const BASE_URL = import.meta.env.VITE_APP_SEARCH_API_URL || 'http://localhost:8085';
 
 export default {
   getStores: function(pageNum, pageSize, isDesc, keyWord, storeRegion, sort){

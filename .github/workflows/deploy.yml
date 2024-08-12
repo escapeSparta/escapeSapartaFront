@@ -7,17 +7,10 @@ on:
       - develop
 
 jobs:
-  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -25,78 +18,14 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_ID }}" --password-stdin
-
-      - name: Build and push escape-frontend Docker image
-        run: |
-          docker build -t semmmi/escape-frontend:latest .
-          docker push semmmi/escape-frontend:latest
-          
       - name: Deploy to Vercel
+        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VUE_APP_CORE_API_URL: ${{ secrets.VUE_APP_CORE_API_URL }}
-          VUE_APP_ADMIN_API_URL: ${{ secrets.VUE_APP_ADMIN_API_URL }}
-          VUE_APP_MANAGER_API_URL: ${{ secrets.VUE_APP_MANAGER_API_URL }}
-          VUE_APP_CONSUMER_API_URL: ${{ secrets.VUE_APP_CONSUMER_API_URL }}
-          VUE_APP_RESERVATION_API_URL: ${{ secrets.VUE_APP_RESERVATION_API_URL }}
-          VUE_APP_SEARCH_API_URL: ${{ secrets.VUE_APP_SEARCH_API_URL }}
-        run: |
-          npx vercel --prod --confirm --env VUE_APP_CORE_API_URL=$VUE_APP_CORE_API_URL --env VUE_APP_ADMIN_API_URL=$VUE_APP_ADMIN_API_URL --env VUE_APP_MANAGER_API_URL=$VUE_APP_MANAGER_API_URL --env VUE_APP_CONSUMER_API_URL=$VUE_APP_CONSUMER_API_URL --env VUE_APP_RESERVATION_API_URL=$VUE_APP_RESERVATION_API_URL --env VUE_APP_SEARCH_API_URL=$VUE_APP_SEARCH_API_URL
-
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-
-      
-      
-
-#      # .env 파일을 EC2로 복사
-#      - name: Copy .env file to EC2
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.EC2_HOST }}
-#          username: ${{ secrets.EC2_USER }}
-#          key: ${{ secrets.EC2_KEY }}
-#          source: ".env"
-#          target: "/path/to/escapesparta-b13/.env"
-#
-#
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: build-and-push
-#
-#    steps:
-#    - name: Checkout code
-#      uses: actions/checkout@v2
-#
-#    - name: Copy files via SSH
-#      uses: appleboy/scp-action@master
-#      with:
-#        host: ${{ secrets.EC2_HOST }}
-#        username: ${{ secrets.EC2_USER }}
-#        key: ${{ secrets.EC2_KEY }}
-#        source: "./docker-compose.yml"  # Adjust the path if necessary
-#        target: "/home/ec2-user/app"
-#
-#    - name: Execute remote command via SSH
-#      uses: appleboy/ssh-action@master
-#      with:
-#        host: ${{ secrets.EC2_HOST }}
-#        username: ${{ secrets.EC2_USER }}
-#        key: ${{ secrets.EC2_KEY }}
-#        script: |
-#          cd /home/ec2-user/app
-#          docker-compose pull
-#          docker-compose up -d --build
-
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
+          VITE_APP_CORE_API_URL: ${{ secrets.VITE_APP_CORE_API_URL}}
+          VITE_APP_ADMIN_API_URL: ${{ secrets.VITE_APP_ADMIN_API_URL}}
+          VITE_APP_MANAGER_API_URL: ${{ secrets.VITE_APP_MANAGER_API_URL}}
+          VITE_APP_CONSUMER_API_URL: ${{ secrets.VITE_APP_CONSUMER_API_URL}}
+          VITE_APP_RESERVATION_API_URL: ${{ secrets.VITE_APP_RESERVATION_API_URL}}
+          VITE_APP_SEARCH_API_URL: ${{ secrets.VITE_APP_SEARCH_API_URL}}
