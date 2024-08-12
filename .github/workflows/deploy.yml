@@ -14,20 +14,58 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+            node-version: '16'  # Vue 프로젝트에 맞는 Node.js 버전
+
       - name: Install dependencies
         run: npm install
 
       - name: Build the project
         run: npm run build
 
-      - name: Deploy to Vercel
-        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
-          VITE_APP_CORE_API_URL: ${{ secrets.VITE_APP_CORE_API_URL}}
-          VITE_APP_ADMIN_API_URL: ${{ secrets.VITE_APP_ADMIN_API_URL}}
-          VITE_APP_MANAGER_API_URL: ${{ secrets.VITE_APP_MANAGER_API_URL}}
-          VITE_APP_CONSUMER_API_URL: ${{ secrets.VITE_APP_CONSUMER_API_URL}}
-          VITE_APP_RESERVATION_API_URL: ${{ secrets.VITE_APP_RESERVATION_API_URL}}
-          VITE_APP_SEARCH_API_URL: ${{ secrets.VITE_APP_SEARCH_API_URL}}
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: /tmp/vue-app
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_FRONT_HOST }}
+          username: ${{ secrets.EC2_FRONT_USER }}
+          key: ${{ secrets.EC2_FRONT_KEY }}
+          script: |
+            # Define paths
+            BUILD_DIR=/home/ubuntu/vue-app
+            TEMP_DIR=/tmp/vue-app
+              
+            # Clean up old build
+            rm -rf $BUILD_DIR
+            mkdir -p $BUILD_DIR
+              
+            # Upload new build artifacts
+            cp -r $TEMP_DIR/* $BUILD_DIR
+              
+            # Restart web server (Nginx) if applicable
+            sudo systemctl restart nginx
+
+#      - name: Deploy to Vercel
+#        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
+#        env:
+#          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+#          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
+#          VITE_APP_CORE_API_URL: ${{ secrets.VITE_APP_CORE_API_URL}}
+#          VITE_APP_ADMIN_API_URL: ${{ secrets.VITE_APP_ADMIN_API_URL}}
+#          VITE_APP_MANAGER_API_URL: ${{ secrets.VITE_APP_MANAGER_API_URL}}
+#          VITE_APP_CONSUMER_API_URL: ${{ secrets.VITE_APP_CONSUMER_API_URL}}
+#          VITE_APP_RESERVATION_API_URL: ${{ secrets.VITE_APP_RESERVATION_API_URL}}
+#          VITE_APP_SEARCH_API_URL: ${{ secrets.VITE_APP_SEARCH_API_URL}}
