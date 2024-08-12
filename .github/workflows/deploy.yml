@@ -22,12 +22,3 @@ jobs:
 
       - name: Deploy to Vercel
         run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
-#        env:
-#          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
-#          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
-#          VITE_APP_CORE_API_URL: ${{ secrets.VITE_APP_CORE_API_URL}}
-#          VITE_APP_ADMIN_API_URL: ${{ secrets.VITE_APP_ADMIN_API_URL}}
-#          VITE_APP_MANAGER_API_URL: ${{ secrets.VITE_APP_MANAGER_API_URL}}
-#          VITE_APP_CONSUMER_API_URL: ${{ secrets.VITE_APP_CONSUMER_API_URL}}
-#          VITE_APP_RESERVATION_API_URL: ${{ secrets.VITE_APP_RESERVATION_API_URL}}
-#          VITE_APP_SEARCH_API_URL: ${{ secrets.VITE_APP_SEARCH_API_URL}}
