@@ -53,7 +53,7 @@ jobs:
             mkdir -p $BUILD_DIR
               
             # Upload new build artifacts
-            scp -r $TEMP_DIR/* $BUILD_DIR
+            scp -r $TEMP_DIR/* $BUILD_DIR/
               
             # Restart web server (Nginx) if applicable
             sudo systemctl restart nginx
