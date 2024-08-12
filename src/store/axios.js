@@ -1,10 +1,11 @@
 // src/store/axios.js
 import axios from 'axios';
 import store from '@/store';
-import process from "eslint-plugin-vue/lib/configs/base.js";
+import {ref} from "vue";
+import search from "@/api/Search";
 
 // Environment variables
-// const domain = 'https://www.escapesparta.store'
+const domain = 'https://www.escapesparta.store'
 // const coreApiUrl = domain + '/core';
 // const adminApiUrl = domain + '/admin';
 // const managerApiUrl = domain + '/manager';
@@ -12,50 +13,59 @@ import process from "eslint-plugin-vue/lib/configs/base.js";
 // const reservationApiUrl = domain + '/reservations';
 // const searchApiUrl = domain + '/search';
 
-const coreApiUrl = process.env.VITE_APP_CORE_API_URL || 'http://localhost:8080/core';
-const adminApiUrl = process.env.VITE_APP_ADMIN_API_URL || 'http://localhost:8081/admin';
-const managerApiUrl = process.env.VITE_APP_MANAGER_API_URL || 'http://localhost:8082/manager';
-const consumerApiUrl = process.env.VITE_APP_CONSUMER_API_URL || 'http://localhost:8083/consumer';
-const reservationApiUrl = process.env.VITE_APP_RESERVATION_API_URL || 'http://localhost:8084/reservations';
-const searchApiUrl = process.env.VITE_APP_SEARCH_API_URL || 'http://localhost:8085/search';
+// const coreApiUrl = process.env.VITE_APP_CORE_API_URL || 'http://localhost:8080/core';
+// const adminApiUrl = process.env.VITE_APP_ADMIN_API_URL || 'http://localhost:8081/admin';
+// const managerApiUrl = process.env.VITE_APP_MANAGER_API_URL || 'http://localhost:8082/manager';
+// const consumerApiUrl = process.env.VITE_APP_CONSUMER_API_URL || 'http://localhost:8083/consumer';
+// const reservationApiUrl = process.env.VITE_APP_RESERVATION_API_URL || 'http://localhost:8084/reservations';
+// const searchApiUrl = process.env.VITE_APP_SEARCH_API_URL || 'http://localhost:8085/search';
+
+export const apiUrls = {
+    coreApi: import.meta.env.VITE_APP_CORE_API_URL,
+    adminApi: import.meta.env.VITE_APP_ADMIN_API_URL,
+    managerApi: import.meta.env.VITE_APP_MANAGER_API_URL,
+    consumerApi: import.meta.env.VITE_APP_CONSUMER_API_URL,
+    reservationApi: import.meta.env.VITE_APP_RESERVATION_API_URL,
+    searchApi: import.meta.env.VITE_APP_SEARCH_API_URL,
+};
 
 const axiosSearch = axios.create({
-    baseURL: searchApiUrl,
+    baseURL: ref(apiUrls.searchApi),
     headers: {
         'Content-Type': 'application/json'
     }
 })
 
 const axiosCore = axios.create({
-    baseURL: coreApiUrl,
+    baseURL: ref(apiUrls.coreApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosAdmin = axios.create({
-    baseURL: adminApiUrl,
+    baseURL: ref(apiUrls.adminApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosManager = axios.create({
-    baseURL: managerApiUrl,
+    baseURL: ref(apiUrls.managerApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosReservation = axios.create({
-    baseURL: reservationApiUrl,
+    baseURL: ref(apiUrls.reservationApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosConsumer = axios.create({
-    baseURL: consumerApiUrl,
+    baseURL: ref(apiUrls.consumerApi),
     headers: {
         'Content-Type': 'application/json'
     }
