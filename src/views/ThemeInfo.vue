@@ -250,8 +250,7 @@ export default {
           data: {
             themeTimeId: themeTimeId,
             player: player,
-            price: price,
-            paymentStatus: 'PENDING'
+            price: price
           }
         })
         console.log(response.data.data.totalPrice);
