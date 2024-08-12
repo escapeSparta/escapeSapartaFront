@@ -5,13 +5,13 @@ import {ref} from "vue";
 import search from "@/api/Search";
 
 // Environment variables
-const domain = 'https://www.escapesparta.store/api'
-const coreApiUrl = domain + '/core';
-const adminApiUrl = domain + '/admin';
-const managerApiUrl = domain + '/manager';
-const consumerApiUrl = domain + '/consumer';
-const reservationApiUrl = domain + '/reservations';
-const searchApiUrl = domain + '/search';
+// const domain = 'https://www.escapesparta.store/api'
+// const coreApiUrl = domain + '/core';
+// const adminApiUrl = domain + '/admin';
+// const managerApiUrl = domain + '/manager';
+// const consumerApiUrl = domain + '/consumer';
+// const reservationApiUrl = domain + '/reservations';
+// const searchApiUrl = domain + '/search';
 
 // const coreApiUrl = process.env.VITE_APP_CORE_API_URL || 'http://localhost:8080/core';
 // const adminApiUrl = process.env.VITE_APP_ADMIN_API_URL || 'http://localhost:8081/admin';
@@ -30,42 +30,42 @@ export const apiUrls = {
 };
 
 const axiosSearch = axios.create({
-    baseURL: searchApiUrl,
+    baseURL: ref(apiUrls.searchApi),
     headers: {
         'Content-Type': 'application/json'
     }
 })
 
 const axiosCore = axios.create({
-    baseURL: coreApiUrl,
+    baseURL: ref(apiUrls.coreApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosAdmin = axios.create({
-    baseURL: adminApiUrl,
+    baseURL: ref(apiUrls.adminApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosManager = axios.create({
-    baseURL: managerApiUrl,
+    baseURL: ref(apiUrls.managerApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosReservation = axios.create({
-    baseURL: reservationApiUrl,
+    baseURL: ref(apiUrls.reservationApi),
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosConsumer = axios.create({
-    baseURL: consumerApiUrl,
+    baseURL: ref(apiUrls.consumerApi),
     headers: {
         'Content-Type': 'application/json'
     }
