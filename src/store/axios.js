@@ -4,7 +4,7 @@ import store from '@/store';
 import process from "eslint-plugin-vue/lib/configs/base.js";
 
 // Environment variables
-const domain = 'https://escapesparta.store'
+const domain = 'https://www.escapesparta.store'
 // const coreApiUrl = process.env.VUE_APP_CORE_API_URL || 'http://localhost:8080';
 // const adminApiUrl = process.env.VUE_APP_ADMIN_API_URL || 'http://localhost:8081';
 // const managerApiUrl = process.env.VUE_APP_MANAGER_API_URL || 'http://localhost:8082';
