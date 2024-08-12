@@ -111,10 +111,6 @@ export default {
       console.log(storeId);
       this.$router.push({ name: 'Theme', params: { storeId: storeId, storeTitle: storeName } });
     },
-    login() {
-      alert('로그인 버튼 클릭');
-      // 로그인 로직을 여기에 추가하세요.
-    },
     changePage(page) {
       if (page > 0 && page <= this.totalPages) {
         this.pageNum = page;

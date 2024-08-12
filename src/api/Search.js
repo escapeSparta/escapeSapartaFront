@@ -16,10 +16,6 @@ export default {
     });
   },
 
-  getStoreInfo: function(id){
-    return axios.get(BASE_URL + `search/stores/${id}/theme`);
-  },
-
   getThemes: function(pageNum, pageSize, isDes, sort, storeId){
     return axios.get(BASE_URL + `search/stores/${storeId}/theme`,{
       params:{
