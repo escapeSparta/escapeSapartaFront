@@ -22,7 +22,7 @@ const mutations = {
 const actions = {
     async login({ commit, dispatch }, { email, password }) {
         try {
-            const response = await dispatch('axios/axiosCoreRequest', {
+            const response = await dispatch('axios/axiosCorePermitRequest', {
                 method: 'post',
                 url: '/users/login',
                 data: { email, password },

@@ -19,7 +19,6 @@
 </template>
 
 <script>
-// import apiPayment from '@/api/payment.js';
 import { mapActions } from "vuex";
 
 export default {
@@ -48,39 +47,31 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.response);
     if (this.response && this.response.totalPrice) {
       this.selectedPlayers = this.response.player; // 초기 인원 설정
     }
   },
   methods: {
     ...mapActions('axios', ['axiosReservationRequest']),
-    // selectPlayers(players) {
-    //   this.selectedPlayers = players;
-    // },
+
     selectPayment(payment) {
       this.selectedPayment = payment;
     },
     async submitForm() {
-      // if (this.selectedPlayers === 0) {
-      //   alert('인원을 선택해주세요.');
-      //   return;
-      // }
       if (!this.selectedPayment) {
         alert('결제방식을 선택해주세요.');
         return;
       }
 
       try {
-        // console.log(this.$route.query.reservationId);
+        const reservationId = this.$route.query.reservationId;
         const response = await this.axiosReservationRequest({
           method: 'post',
-          url: `/payments/reservations/${this.$route.query.reservationId}`
+          url: `/${this.$route.query.reservationId}/payments`
         })
-
-        console.log(response)
-        const nextRedirectPcUrl = response.data;
-        console.log(nextRedirectPcUrl)
+        localStorage.setItem('reservationId' ,reservationId);
+        localStorage.setItem('tid', response.data.tid);
+        const nextRedirectPcUrl = response.data.next_redirect_pc_url;
         window.location.href = nextRedirectPcUrl;
       } catch (e) {
         console.log(e);

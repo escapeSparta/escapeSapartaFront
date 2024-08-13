@@ -68,7 +68,7 @@ export default {
       try {
         const response = await this.axiosReservationRequest({
           method: 'get',
-          url: '/reservations'
+          url: ''
         })
         this.reservations = response.data.data;
       } catch (error) {
@@ -90,9 +90,9 @@ export default {
       return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
     getReservationStatusText(status) {
-      if (status === 'ACTIVE') {
+      if (status === 'COMPLETE') {
         return '예약 완료';
-      } else if (status === 'DEACTIVE') {
+      } else if (status === 'CANCEL') {
         return '예약 취소';
       } else {
         return '알 수 없는 상태';
@@ -104,7 +104,7 @@ export default {
         try {
           await this.axiosReservationRequest({
             method: 'delete',
-            url: `/reservations/${id}`
+            url: `/${id}`
           })
           alert(`예약이(가) 취소되었습니다.`);
           await this.fetchReservations();
@@ -117,7 +117,7 @@ export default {
       }
     },
     isDeactive(status) {
-      return status === 'DEACTIVE';
+      return status === 'CANCEL';
     },
     openReviewModal(id, storeName, themeName) {
       this.selectedReservationId = id;
