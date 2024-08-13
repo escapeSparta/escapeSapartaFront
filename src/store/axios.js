@@ -5,7 +5,7 @@ import {ref} from "vue";
 import search from "@/api/Search";
 
 // Environment variables
-const domain = 'https://www.escapesparta.store/api'
+const domain = 'https://escapesparta.store/api'
 // const coreApiUrl = domain + '/core';
 // const adminApiUrl = domain + '/admin';
 // const managerApiUrl = domain + '/manager';

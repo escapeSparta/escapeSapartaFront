@@ -28,9 +28,9 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['login']),
-    loginUser() {
+    async loginUser() {
       try {
-        this.login({
+        await this.login({
           email: this.email,
           password: this.password,
         });
