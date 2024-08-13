@@ -68,7 +68,7 @@ export default {
       try {
         const response = await this.axiosReservationRequest({
           method: 'get',
-          url: '/reservations'
+          url: ''
         })
         this.reservations = response.data.data;
       } catch (error) {
@@ -104,7 +104,7 @@ export default {
         try {
           await this.axiosReservationRequest({
             method: 'delete',
-            url: `/reservations/${id}`
+            url: `/${id}`
           })
           alert(`예약이(가) 취소되었습니다.`);
           await this.fetchReservations();
