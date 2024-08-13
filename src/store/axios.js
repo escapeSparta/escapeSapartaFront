@@ -29,14 +29,14 @@ export const apiUrls = {
     searchApi: import.meta.env.VITE_APP_SEARCH_API_URL,
 };
 
-const axiosSearch = axios.create({
-    baseURL: ref(apiUrls.searchApi),
+const axiosCore = axios.create({
+    baseURL: ref(apiUrls.coreApi),
     headers: {
         'Content-Type': 'application/json'
     }
-})
+});
 
-const axiosCore = axios.create({
+const axiosCorePermit = axios.create({
     baseURL: ref(apiUrls.coreApi),
     headers: {
         'Content-Type': 'application/json'
@@ -57,6 +57,13 @@ const axiosManager = axios.create({
     }
 });
 
+const axiosConsumer = axios.create({
+    baseURL: ref(apiUrls.consumerApi),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
 const axiosReservation = axios.create({
     baseURL: ref(apiUrls.reservationApi),
     headers: {
@@ -64,12 +71,12 @@ const axiosReservation = axios.create({
     }
 });
 
-const axiosConsumer = axios.create({
-    baseURL: ref(apiUrls.consumerApi),
+const axiosSearch = axios.create({
+    baseURL: ref(apiUrls.searchApi),
     headers: {
         'Content-Type': 'application/json'
     }
-});
+})
 
 const setInterceptors = (axiosInstance) => {
     axiosInstance.interceptors.request.use(config => {
@@ -134,6 +141,9 @@ export default {
     actions: {
         async axiosCoreRequest(_, config) {
             return axiosCore(config);
+        },
+        async axiosCorePermitRequest(_, config) {
+            return axiosCorePermit(config);
         },
         async axiosAdminRequest(_, config) {
             return axiosAdmin(config);
