@@ -44,35 +44,35 @@ const axiosCorePermit = axios.create({
 });
 
 const axiosAdmin = axios.create({
-    baseURL: ref(apiUrls.adminApi),
+    baseURL: apiUrls.adminApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosManager = axios.create({
-    baseURL: ref(apiUrls.managerApi),
+    baseURL: apiUrls.managerApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosConsumer = axios.create({
-    baseURL: ref(apiUrls.consumerApi),
+    baseURL: apiUrls.consumerApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosReservation = axios.create({
-    baseURL: ref(apiUrls.reservationApi),
+    baseURL: apiUrls.reservationApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosSearch = axios.create({
-    baseURL: ref(apiUrls.searchApi),
+    baseURL: apiUrls.searchApi,
     headers: {
         'Content-Type': 'application/json'
     }
