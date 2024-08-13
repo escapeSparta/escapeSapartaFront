@@ -28,23 +28,6 @@ jobs:
       - name: Build the project
         run: npm run build
 
-#      - name: Upload build artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: build
-#          path: dist
-#
-#      - name: Download build artifacts
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: build
-#          path: /tmp/vue-app
-#
-#      - name: Verify downloaded artifacts
-#        run: |
-#            echo "Listing contents of /tmp/vue-app:"
-#            ls -al /tmp/vue-app
-
       - name: Deploy to Vercel
         run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
         env:
