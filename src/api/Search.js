@@ -32,7 +32,7 @@ export default {
   },
 
   getThemesInfo: function(themeId, storeId){
-    return axios.get(BASE_URL + `search/stores/theme/${themeId}/info`,{
+    return axios.get(BASE_URL + `/search/stores/theme/${themeId}/info`,{
       params: {
         storeId: storeId
       }
@@ -40,7 +40,7 @@ export default {
   },
 
   getThemesTime: function(themeId, storeId, day){
-    return axios.get(BASE_URL + `search/stores/theme/${themeId}/time`,{
+    return axios.get(BASE_URL + `/search/stores/theme/${themeId}/time`,{
       params: {
         storeId: storeId,
         day: day
