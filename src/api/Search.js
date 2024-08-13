@@ -4,7 +4,7 @@ const BASE_URL = 'https://escapesparta.store/api'
 
 export default {
   getStores: function(pageNum, pageSize, isDesc, keyWord, storeRegion, sort){
-    return axios.get(BASE_URL + `search/stores`, {
+    return axios.get(BASE_URL + `/search/stores`, {
       params:{
         pageNum: pageNum,
         pageSize: pageSize,
