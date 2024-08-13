@@ -43,7 +43,7 @@ export default {
           method: 'get',
           url: '/search/top-stores'
         })
-        this.store = response.data.data;
+        this.stores = response.data.data;
       } catch(error) {
 
       }
