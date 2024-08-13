@@ -72,15 +72,14 @@ export default {
       }
 
       try {
-        // console.log(this.$route.query.reservationId);
+        const reservationId = this.$route.query.reservationId;
         const response = await this.axiosReservationRequest({
           method: 'post',
           url: `/payments/reservations/${this.$route.query.reservationId}`
         })
-
-        console.log(response)
-        const nextRedirectPcUrl = response.data;
-        console.log(nextRedirectPcUrl)
+        localStorage.setItem('reservationId' ,reservationId);
+        localStorage.setItem('tid', response.data.tid);
+        const nextRedirectPcUrl = response.data.next_redirect_pc_url;
         window.location.href = nextRedirectPcUrl;
       } catch (e) {
         console.log(e);
