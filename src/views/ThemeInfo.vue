@@ -9,7 +9,7 @@
       <div class="booking-container">
         <div class="theme-list">
           <h2>테마 선택</h2>
-          <div v-for="theme in themes" :key="theme.themeId" class="theme-item" @click="selectTheme(theme.themeId)">
+          <div v-for="theme in themes" :key="theme.themeId" class="theme-item" @click="fetchThemeInfo(theme.themeId)">
             <img class="theme-image" :src="theme.themeImage ? theme.themeImage : 'https://escape-sparta.s3.ap-northeast-2.amazonaws.com/default/default_image.png'" :alt="theme.title" width="200" height="200" />
             <div class="theme-name">{{ theme.title }}</div>
           </div>
@@ -84,7 +84,7 @@
 import { mapActions } from "vuex";
 import apiSearch from '@/api/Search.js'
 
-var idid = null;
+// var idid = null;
 export default {
   data() {
     return {
@@ -102,22 +102,24 @@ export default {
   },
 
   props: ['storeId', 'storeTitle'],
+
   mounted() {
     console.log(this.storeId);
     console.log(this.storeTitle);
-    apiSearch.getThemes(null, null, null, null, this.storeId)
-      .then(response => {
-        this.themes = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    this.fetchTheme(this.storeId);
+    // apiSearch.getThemes(null, null, null, null, this.storeId)
+    //   .then(response => {
+    //     this.themes = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   },
 
   watch: {
     async selectedDate(newDate) {
       if (newDate) {
-        await this.fetchTimes();
+        await this.fetchThemeTimes(this.selectedTheme.themeId);
       }
     }
   },
@@ -148,7 +150,6 @@ export default {
           selected: this.selectedDate && this.selectedDate.toDateString() === date.toDateString()
         });
       }
-
       return days;
     },
     difficultyStars() {
@@ -163,25 +164,79 @@ export default {
     }
   },
   methods: {
-    ...mapActions('axios', ['axiosReservationRequest', 'axiosConsumerRequest']),
-    selectTheme(themeId) {
-      idid = themeId;
-      apiSearch.getThemesInfo(themeId, this.storeId)
-        .then(response => {
-          console.log(response);
-          this.selectedTheme = response.data.data;
-          // 날짜와 시간을 초기화
-          this.selectedDate = null;
-          this.selectedTime = null;
-          this.selectedTimeId = null;  // 추가: 시간 ID 초기화
-          this.times = [];
-          this.player = null;
-          this.price = null;
+    ...mapActions('axios', ['axiosSearchRequest', 'axiosReservationRequest', 'axiosConsumerRequest']),
+
+    async fetchTheme(storeId) {
+      try {
+        const response = await this.axiosSearchRequest({
+          method: 'get',
+          url: `/search/stores/${storeId}/theme`,
+          params: {
+            params:{
+              pageNum: null,
+              pageSize: null,
+              isDes: null,
+              sort: null
+            }
+          }
         })
-        .catch(e => {
-          console.log(e);
-        })
+        this.themes = response.data.data.content;
+      } catch(error) {
+        let errorMessage = '오류가 발생했습니다.';
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message;
+        }
+        console.error('Error : ', error);
+        alert(errorMessage);
+      }
     },
+    async fetchThemeInfo(themeId) {
+      try {
+        const response = await this.axiosSearchRequest({
+          method: 'get',
+          url: `/search/stores/theme/${themeId}/info`,
+          params: {
+            storeId: this.storeId
+          }
+        })
+        this.selectedTheme = response.data.data;
+
+        // 날짜와 시간을 초기화
+        this.selectedDate = null;
+        this.selectedTime = null;
+        this.selectedTimeId = null;  // 추가: 시간 ID 초기화
+        this.times = [];
+        this.player = null;
+        this.price = null;
+
+      } catch (error) {
+        let errorMessage = '오류가 발생했습니다.';
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message;
+        }
+        console.error('Error : ', error);
+        alert(errorMessage);
+      }
+    },
+    // selectTheme(themeId) {
+    //   idid = themeId;
+    //   apiSearch.getThemesInfo(themeId, this.storeId)
+    //     .then(response => {
+    //       console.log(response);
+    //       this.selectedTheme = response.data.data;
+    //
+    //       // 날짜와 시간을 초기화
+    //       this.selectedDate = null;
+    //       this.selectedTime = null;
+    //       this.selectedTimeId = null;  // 추가: 시간 ID 초기화
+    //       this.times = [];
+    //       this.player = null;
+    //       this.price = null;
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     })
+    // },
     updateDetails() {
       this.difficultyStars = this.computeDifficultyStars();
     },
@@ -218,11 +273,19 @@ export default {
       const date = new Date(dateTimeString);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     },
-    async fetchTimes() {
-      if (!this.selectedDate || !idid) return;
+    async fetchThemeTimes(themeId) {
+      if (!this.selectedDate || !themeId) return;
       const day = this.selectedDate.toISOString().split('T')[0];
       try {
-        const response = await apiSearch.getThemesTime(idid, this.storeId, day);
+        const response = await this.axiosSearchRequest({
+          method: 'get',
+          url: `/search/stores/theme/${themeId}/time`,
+          params: {
+            storeId: this.storeId,
+            day: day
+          }
+        })
+
         console.log(response);
         this.times = response.data.data;
       } catch (e) {

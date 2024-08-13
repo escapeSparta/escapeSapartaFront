@@ -3,7 +3,7 @@
     <div class="container">
       <h1>전국 방탈출 카페 검색</h1>
       <section id="search" class="search-section">
-        <form class="search-form" @submit.prevent="searchEscapeRooms">
+        <form class="search-form" @submit.prevent="searchStores">
           <select v-model="storeRegion">
             <option value="ALL">지역 선택</option>
             <option value="SEOUL">서울</option>
@@ -57,6 +57,7 @@
 
 <script>
 import apiSearch from '@/api/Search.js'
+import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -71,14 +72,15 @@ export default {
     }
   },
   mounted() {
-    apiSearch.getStores()
-      .then(response => {
-        this.searchResults = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
-        this.totalPages = response.data.data.totalPages;
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    this.searchStores();
+    // apiSearch.getStores()
+    //   .then(response => {
+    //     this.searchResults = response.data.data.content;
+    //     this.totalPages = response.data.data.totalPages;
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   },
   computed: {
     // 현재 페이지와 페이지 범위를 기반으로 표시할 페이지 목록 계산
@@ -95,18 +97,39 @@ export default {
     }
   },
   methods: {
-    searchEscapeRooms() {
-      console.log(this.storeRegion);
-      apiSearch.getStores(this.pageNum, this.pageSize, null, this.keyWord, this.storeRegion, null)
-        .then(response => {
-          console.log(response);
-          this.searchResults = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
-          this.totalPages = response.data.data.totalPages;
+    ...mapActions('axios', ['axiosSearchRequest']),
+    async searchStores() {
+      try {
+        const response = await this.axiosSearchRequest({
+          method: 'get',
+          url: '/search/stores',
+          params: {
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+            isDesc: null,
+            keyWord: this.keyWord,
+            storeRegion: this.storeRegion,
+            sort: null
+          }
         })
-        .catch(e => {
-          console.log(e);
-        });
+        this.searchResults = response.data.data.content;
+        this.totalPages = response.data.data.totalPages;
+      } catch (error) {
+        console.error("오류 발생: ", error);
+      }
     },
+    // searchEscapeRooms() {
+    //   console.log(this.storeRegion);
+    //   apiSearch.getStores(this.pageNum, this.pageSize, null, this.keyWord, this.storeRegion, null)
+    //     .then(response => {
+    //       console.log(response);
+    //       this.searchResults = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
+    //       this.totalPages = response.data.data.totalPages;
+    //     })
+    //     .catch(e => {
+    //       console.log(e);
+    //     });
+    // },
     navigateToTheme(storeId, storeName) {
       console.log(storeId);
       this.$router.push({ name: 'Theme', params: { storeId: storeId, storeTitle: storeName } });
@@ -114,7 +137,7 @@ export default {
     changePage(page) {
       if (page > 0 && page <= this.totalPages) {
         this.pageNum = page;
-        this.searchEscapeRooms();
+        this.searchStores();
       }
     }
   }
@@ -153,7 +176,7 @@ body, html {
 }
 h1, h2 {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 5rem;
   text-shadow: 0 0 15px #0f0;
 }
 .search-section {
@@ -163,36 +186,61 @@ h1, h2 {
   box-shadow: 0 0 20px #0f0;
   margin: 2rem 0;
 }
+
 .search-form {
+  flex-shrink: 0;
   display: flex;
-  justify-content: center; /* 요소들을 왼쪽에 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
   gap: 1rem;
+  flex-direction: row;
 }
 
-input[type="text"], select {
-  flex: 1 1 auto;
+select{
   padding: 0.5rem;
   border: 1px solid #0f0;
   background-color: #000;
   color: #0f0;
   border-radius: 5px;
+  min-width: 50px; /* 선택 영역 및 입력창의 최소 너비 설정 */
 }
 
-button {
+input[type="text"] {
+  padding: 0.5rem;
+  border: 1px solid #0f0;
+  background-color: #000;
+  color: #0f0;
+  border-radius: 5px;
+  min-width: 200px; /* 선택 영역 및 입력창의 최소 너비 설정 */
+}
+
+button[type="submit"] {
   flex-shrink: 0;
   background-color: #0f0;
   color: #000;
   border: none;
-  padding: 0.5rem 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 5px;
+  margin-top: 0;
 }
+
+button{
+  flex-shrink: 0;
+  background-color: #0f0;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  margin-top: 0;
+  padding: 0.5rem;
+}
+
+
 button:hover {
   background-color: #000;
-  color: #0f0;
-  border: 1px solid #0f0;
+  color: black;
 }
 .search-results {
   display: grid;

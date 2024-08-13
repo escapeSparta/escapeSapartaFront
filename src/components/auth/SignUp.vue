@@ -11,12 +11,12 @@
       <input type="text" v-model="name" placeholder="Enter your name" required>
       <!--      <input type="text" v-model="adminKey" placeholder="Enter admin key (if applicable)">-->
       <button type="button" class="signup-button" @click="createAccount">회원가입</button>
-      <p>Or sign up with:</p>
-      <div class="social-buttons">
-        <button @click="socialSignUp('Google')">Google</button>
-        <button @click="socialSignUp('Kakao')">Kakao</button>
-        <button @click="socialSignUp('Naver')">Naver</button>
-      </div>
+<!--      <p>Or sign up with:</p>-->
+<!--      <div class="social-buttons">-->
+<!--        <button @click="socialSignUp('Google')">Google</button>-->
+<!--        <button @click="socialSignUp('Kakao')">Kakao</button>-->
+<!--        <button @click="socialSignUp('Naver')">Naver</button>-->
+<!--      </div>-->
       <router-link to="/" class="back-link">Back to Home</router-link>
     </div>
   </div>
