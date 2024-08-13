@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://3.38.59.253:8085/api/'
+const BASE_URL = 'https://escapesparta.store/api/'
 
 export default {
   getStores: function(pageNum, pageSize, isDesc, keyWord, storeRegion, sort){
