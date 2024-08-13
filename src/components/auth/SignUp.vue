@@ -53,7 +53,7 @@ export default {
     },
     async createAccount() {
       try {
-        const response = await axios.post('/users/signup', {
+        const response = await axios.post('https://escapesparta.store/api/core/users/signup', {
           name: this.name,
           email: this.email,
           password: this.password,
