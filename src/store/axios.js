@@ -1,24 +1,9 @@
 // src/store/axios.js
 import axios from 'axios';
 import store from '@/store';
-import {ref} from "vue";
-import search from "@/api/Search";
 
 // Environment variables
 const domain = 'https://escapesparta.store/api'
-// const coreApiUrl = domain + '/core';
-// const adminApiUrl = domain + '/admin';
-// const managerApiUrl = domain + '/manager';
-// const consumerApiUrl = domain + '/consumer';
-// const reservationApiUrl = domain + '/reservations';
-// const searchApiUrl = domain + '/search';
-
-// const coreApiUrl = process.env.VITE_APP_CORE_API_URL || 'http://localhost:8080/core';
-// const adminApiUrl = process.env.VITE_APP_ADMIN_API_URL || 'http://localhost:8081/admin';
-// const managerApiUrl = process.env.VITE_APP_MANAGER_API_URL || 'http://localhost:8082/manager';
-// const consumerApiUrl = process.env.VITE_APP_CONSUMER_API_URL || 'http://localhost:8083/consumer';
-// const reservationApiUrl = process.env.VITE_APP_RESERVATION_API_URL || 'http://localhost:8084/reservations';
-// const searchApiUrl = process.env.VITE_APP_SEARCH_API_URL || 'http://localhost:8085/search';
 
 export const apiUrls = {
     coreApi: import.meta.env.VITE_APP_CORE_API_URL,
