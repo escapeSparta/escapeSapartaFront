@@ -30,14 +30,14 @@ export const apiUrls = {
 };
 
 const axiosCore = axios.create({
-    baseURL: ref(apiUrls.coreApi),
+    baseURL: apiUrls.coreApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosCorePermit = axios.create({
-    baseURL: ref(apiUrls.coreApi),
+    baseURL: apiUrls.coreApi,
     headers: {
         'Content-Type': 'application/json'
     }
