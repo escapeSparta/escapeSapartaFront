@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const BASE_URL = "http://localhost:8085/"
+const BASE_URL = 'https://escapesparta.store/api'
 
 export default {
   getStores: function(pageNum, pageSize, isDesc, keyWord, storeRegion, sort){
-    return axios.get(BASE_URL + `search/stores`, {
+    return axios.get(BASE_URL + `/search/stores`, {
       params:{
         pageNum: pageNum,
         pageSize: pageSize,
@@ -17,11 +17,11 @@ export default {
   },
 
   getStoreInfo: function(id){
-    return axios.get(BASE_URL + `search/stores/${id}/theme`);
+    return axios.get(BASE_URL + `/search/stores/${id}/theme`);
   },
 
   getThemes: function(pageNum, pageSize, isDes, sort, storeId){
-    return axios.get(BASE_URL + `search/stores/${storeId}/theme`,{
+    return axios.get(BASE_URL + `/search/stores/${storeId}/theme`,{
       params:{
         pageNum: pageNum,
         pageSize: pageSize,
@@ -32,7 +32,7 @@ export default {
   },
 
   getThemesInfo: function(themeId, storeId){
-    return axios.get(BASE_URL + `search/stores/theme/${themeId}/info`,{
+    return axios.get(BASE_URL + `/search/stores/theme/${themeId}/info`,{
       params: {
         storeId: storeId
       }
@@ -40,7 +40,7 @@ export default {
   },
 
   getThemesTime: function(themeId, storeId, day){
-    return axios.get(BASE_URL + `search/stores/theme/${themeId}/time`,{
+    return axios.get(BASE_URL + `/search/stores/theme/${themeId}/time`,{
       params: {
         storeId: storeId,
         day: day

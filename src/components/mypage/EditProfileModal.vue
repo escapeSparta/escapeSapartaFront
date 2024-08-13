@@ -37,7 +37,7 @@ export default {
       try {
         await this.axiosConsumerRequest({
           method: 'put',
-          url: '/users/profile',
+          url: '/profile',
           data: {
             name: this.user.name,
           },

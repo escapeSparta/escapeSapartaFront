@@ -246,7 +246,7 @@ export default {
         //예약 정보가 담겨있는 response
         const response = await this.axiosReservationRequest({
           method: 'post',
-          url: '/reservations',
+          url: '',
           data: {
             themeTimeId: themeTimeId,
             player: player,
@@ -254,15 +254,13 @@ export default {
           }
         })
         console.log(response.data.data.totalPrice);
-        // this.$router.push({name: 'Reservation', params: {response: response.data.data}});
+
         // 화면전환 코드
         this.$router.push({
           name: 'Reservation',
           query: response.data.data
-            // 필요한 다른 필드들...
 
         });
-        // alert(`예약이 완료되었습니다!\n테마: ${this.selectedTheme.title}\n날짜: ${this.formattedDate}\n시간: ${this.selectedTime}\n인원: ${this.player}인`);
       } catch(error){
         console.log(error);
         alert(error);

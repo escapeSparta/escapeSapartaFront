@@ -39,7 +39,7 @@ export default {
   methods: {
     async sendVerificationCode() {
       try {
-        const response = await axios.post('http://localhost:8080/users/mail', {
+        const response = await axios.post('https://escapesparta.store/api/core/users/mail', {
           email: this.email,
           userType: 'USER'
         });
@@ -53,7 +53,7 @@ export default {
     },
     async createAccount() {
       try {
-        const response = await axios.post('/users/signup', {
+        const response = await axios.post('https://escapesparta.store/api/core/users/signup', {
           name: this.name,
           email: this.email,
           password: this.password,

@@ -2,47 +2,66 @@
 import axios from 'axios';
 import store from '@/store';
 
-const axiosSearch = axios.create({
-    baseURL: 'http://localhost:8085',
+// Environment variables
+const domain = 'https://escapesparta.store/api'
+
+export const apiUrls = {
+    coreApi: import.meta.env.VITE_APP_CORE_API_URL,
+    adminApi: import.meta.env.VITE_APP_ADMIN_API_URL,
+    managerApi: import.meta.env.VITE_APP_MANAGER_API_URL,
+    consumerApi: import.meta.env.VITE_APP_CONSUMER_API_URL,
+    reservationApi: import.meta.env.VITE_APP_RESERVATION_API_URL,
+    searchApi: import.meta.env.VITE_APP_SEARCH_API_URL,
+};
+
+const axiosCore = axios.create({
+    baseURL: apiUrls.coreApi,
     headers: {
         'Content-Type': 'application/json'
     }
-})
+});
 
-const axiosCore = axios.create({
-    baseURL: 'http://localhost:8080',
+const axiosCorePermit = axios.create({
+    baseURL: apiUrls.coreApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosAdmin = axios.create({
-    baseURL: 'http://localhost:8081',
+    baseURL: apiUrls.adminApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosManager = axios.create({
-    baseURL: 'http://localhost:8082',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
-
-const axiosReservation = axios.create({
-    baseURL: 'http://localhost:8084',
+    baseURL: apiUrls.managerApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const axiosConsumer = axios.create({
-    baseURL: 'http://localhost:8083',
+    baseURL: apiUrls.consumerApi,
     headers: {
         'Content-Type': 'application/json'
     }
 });
+
+const axiosReservation = axios.create({
+    baseURL: apiUrls.reservationApi,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+const axiosSearch = axios.create({
+    baseURL: apiUrls.searchApi,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
 
 const setInterceptors = (axiosInstance) => {
     axiosInstance.interceptors.request.use(config => {
@@ -66,7 +85,7 @@ const setInterceptors = (axiosInstance) => {
                 const accessToken = localStorage.getItem('accessToken');
                 const refreshToken = localStorage.getItem('refreshToken');
 
-                const response = await axios.post('http://localhost:8080/auth/reissue', {}, {
+                const response = await axios.post( domain + '/core/auth/reissue', {}, {
                     headers: {
                         'Authorization': accessToken,
                         'Refreshtoken': refreshToken
@@ -107,6 +126,9 @@ export default {
     actions: {
         async axiosCoreRequest(_, config) {
             return axiosCore(config);
+        },
+        async axiosCorePermitRequest(_, config) {
+            return axiosCorePermit(config);
         },
         async axiosAdminRequest(_, config) {
             return axiosAdmin(config);

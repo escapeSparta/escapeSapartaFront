@@ -39,7 +39,7 @@ export default {
       try {
         await this.axiosConsumerRequest({
           method: 'put',
-          url: '/users/profile/password',
+          url: '/profile/password',
           data: {
             currentPassword: this.user.currentPassword,
             newPassword: this.user.newPassword,

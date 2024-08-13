@@ -27,7 +27,7 @@ export default {
       try {
         await this.axiosReservationRequest({
           method: 'post',
-          url: `/payments/kakaopay-success`,
+          url: `/kakaopay-success`,
           data: {
             reservationId: reservationId,
             tid : tid
