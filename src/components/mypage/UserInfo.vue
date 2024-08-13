@@ -82,7 +82,7 @@ export default {
       try {
         const response = await this.axiosConsumerRequest({
           method: 'get',
-          url: '/users/profile'
+          url: '/profile'
         });
         const userData = response.data.data;
         this.user = {
