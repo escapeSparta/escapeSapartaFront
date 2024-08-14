@@ -34,7 +34,7 @@ export default {
           email: this.email,
           password: this.password,
         });
-        alert('Logged in successfully.');
+        alert('Escape Sparta에 오신 것을 환영합니다!');
         this.$router.push({name: 'Home'});
       } catch (error) {
         console.error('Error logging in:', error);

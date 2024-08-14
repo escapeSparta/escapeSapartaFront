@@ -61,7 +61,7 @@ export default {
           adminKey: this.adminKey
         });
         console.log('Account creation response:', response);
-        alert('Account created successfully.');
+        alert('Escape Sparta와 함께 즐거운 방탈출을 즐겨보세요!');
         this.$router.push("/login");
       } catch (error) {
         let errorMessage = 'Failed to create account. Please try again.'
