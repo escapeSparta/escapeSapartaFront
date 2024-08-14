@@ -5,12 +5,12 @@
       <input type="email" v-model="email" placeholder="Enter your email" required />
       <input type="password" v-model="password" placeholder="Enter your password" required />
       <button type="button" @click="loginUser">Login</button>
-      <p>Or login with:</p>
-      <div class="social-buttons">
-        <button @click="socialLogin('Google')">Google</button>
-        <button @click="socialLogin('Kakao')">Kakao</button>
-        <button @click="socialLogin('Naver')">Naver</button>
-      </div>
+<!--      <p>Or login with:</p>-->
+<!--      <div class="social-buttons">-->
+<!--        <button @click="socialLogin('Google')">Google</button>-->
+<!--        <button @click="socialLogin('Kakao')">Kakao</button>-->
+<!--        <button @click="socialLogin('Naver')">Naver</button>-->
+<!--      </div>-->
       <router-link to="/" class="back-link">Back to Home</router-link>
     </div>
   </div>
@@ -34,7 +34,7 @@ export default {
           email: this.email,
           password: this.password,
         });
-        alert('Logged in successfully.');
+        alert('Escape Sparta에 오신 것을 환영합니다!');
         this.$router.push({name: 'Home'});
       } catch (error) {
         console.error('Error logging in:', error);

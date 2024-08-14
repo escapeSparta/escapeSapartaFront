@@ -6,7 +6,7 @@ import Login from "@/components/auth/Login.vue";
 import UserInfo from "@/components/mypage/UserInfo.vue"
 import ReservationInfo from "@/components/mypage/ReservationInfo.vue";
 import FollowInfo from "@/components/mypage/FollowInfo.vue";
-import MainTheme from '@/views/MainTheme.vue'
+import MainTheme from '@/views/MainStore.vue'
 import SearchStore from '@/views/SearchStore.vue'
 import Reservation from "@/views/Reservation.vue";
 import bookingInfo from '@/components/payment/BookingInfo.vue'
@@ -17,6 +17,7 @@ import payCancel from './components/payment/Cancel.vue';
 import payFail from './components/payment/Fail.vue';
 import ReviewList from '@/components/review/ReviewList.vue'
 import ThemeInfo from '@/views/ThemeInfo.vue'
+import HomePage from "@/views/HomePage.vue";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -24,7 +25,7 @@ export const router = createRouter({
         {
         path: "/",
         name: 'Home',
-        component: MainTheme
+        component: HomePage
         },
         {
             path: "/signup",

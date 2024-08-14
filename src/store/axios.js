@@ -11,7 +11,8 @@ export const apiUrls = {
     managerApi: import.meta.env.VITE_APP_MANAGER_API_URL,
     consumerApi: import.meta.env.VITE_APP_CONSUMER_API_URL,
     reservationApi: import.meta.env.VITE_APP_RESERVATION_API_URL,
-    searchApi: import.meta.env.VITE_APP_SEARCH_API_URL,
+    searchApi: import.meta.env.VITE_APP_SEARCH_API_URL
+    // searchApi: "http://localhost:8085/api"
 };
 
 const axiosCore = axios.create({
@@ -80,6 +81,13 @@ const setInterceptors = (axiosInstance) => {
         const originalRequest = error.config;
         if (error.response && error.response.data.statusCode === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
+
+            // 리프레시 토큰이 없는 경우 즉시 로그인 페이지로 리다이렉트
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (!refreshToken) {
+                window.location.href = '/login';
+                return Promise.reject(error);
+            }
 
             try {
                 const accessToken = localStorage.getItem('accessToken');
