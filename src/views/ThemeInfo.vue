@@ -88,9 +88,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import apiSearch from '@/api/Search.js'
 
-// var idid = null;
 export default {
   data() {
     return {
@@ -231,25 +229,6 @@ export default {
         alert(errorMessage);
       }
     },
-    // selectTheme(themeId) {
-    //   idid = themeId;
-    //   apiSearch.getThemesInfo(themeId, this.storeId)
-    //     .then(response => {
-    //       console.log(response);
-    //       this.selectedTheme = response.data.data;
-    //
-    //       // 날짜와 시간을 초기화
-    //       this.selectedDate = null;
-    //       this.selectedTime = null;
-    //       this.selectedTimeId = null;  // 추가: 시간 ID 초기화
-    //       this.times = [];
-    //       this.player = null;
-    //       this.price = null;
-    //     })
-    //     .catch(e => {
-    //       console.log(e);
-    //     })
-    // },
     updateDetails() {
       this.difficultyStars = this.computeDifficultyStars();
     },
