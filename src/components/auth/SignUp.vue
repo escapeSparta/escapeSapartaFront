@@ -66,17 +66,15 @@ export default {
       } catch (error) {
         let errorMessage = 'Failed to create account. Please try again.'
         if (error.response && error.response.data) {
-          errorMessage = error.response.data.message;
+          errorMessage = error.response.data.data;
         }
-        console.error('Error Editing Profile:', error);
-        alert(errorMessage);
         console.error('Error creating account:', error);
         alert(errorMessage);
       }
     },
     socialSignUp(platform) {
       console.log(`Sign up with ${platform}`);
-      // 각 소셜 플랫폼에 맞는 회원가입 로직을 추가하세요.
+      // 각 소셜 플랫폼에 맞는 회원가입 로직을 추가
     }
   }
 };
