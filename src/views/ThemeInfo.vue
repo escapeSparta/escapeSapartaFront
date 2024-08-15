@@ -310,6 +310,9 @@ export default {
         })
         console.log(response.data.data.totalPrice);
 
+        // response가 false인 경우 즉시 흐름 종료
+        if (response === false) return;
+
         // 화면전환 코드
         this.$router.push({
           name: 'Reservation',
@@ -331,6 +334,9 @@ export default {
           url: `/follow/stores/${storeId}`
         })
         console.log(storeId);
+        // response가 false인 경우 즉시 흐름 종료
+        if (response === false) return;
+
         alert("팔로우가 완료되었습니다!");
       } catch (error) {
         let errorMessage = '팔로우 중 오류가 발생했습니다.';

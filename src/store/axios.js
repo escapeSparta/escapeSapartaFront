@@ -117,9 +117,8 @@ const setInterceptors = (axiosInstance) => {
         } else if(error.response && error.response.data.statusCode === 500) {
             store.dispatch('auth/logout');
             // 로그인 화면으로 리디렉션
-            alert("로그인이 필요한 기능입니다.");
             window.location.href = '/login';
-            return; // Promise.reject 하지 않고 흐름 종료
+            return false; // Promise.reject 하지 않고 흐름 종료
         }
         return Promise.reject(error);
     });
