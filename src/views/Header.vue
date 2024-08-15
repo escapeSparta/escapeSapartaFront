@@ -1,11 +1,10 @@
 <template>
   <header>
     <nav>
-      <div class="logo">EscapeSparta</div>
+      <router-link to="/" class="logo">EscapeSparta</router-link>
       <div>
         <router-link to="/" class="nav-link">홈</router-link>
         <router-link to="/search-store" class="nav-link">검색</router-link>
-<!--        <router-link to="/reviews" class="nav-link">리뷰게시판</router-link>-->
         <router-link to="/profile" class="nav-link" v-if="accessToken && isLoggedIn">프로필</router-link>
         <router-link to="/signup" class="nav-link" v-if="!accessToken && !isLoggedIn">회원가입</router-link>
         <router-link to="/login" class="nav-link" v-if="!accessToken && !isLoggedIn">로그인</router-link>

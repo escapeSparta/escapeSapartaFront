@@ -47,15 +47,21 @@
             <p>선택된 날짜: {{ formattedDate }}</p>
           </div>
           <div class="time-slots">
-            <div
-              v-for="time in times"
-              :key="time.startTime"
-              class="time-slot"
-              :class="{ 'disabled': time.themeTimeStatus === 'DISABLE', 'selected': selectedTime === time }"
-              @click="time.themeTimeStatus === 'ENABLE' ? selectTime(time) : null">
-              {{ formatTime(time.startTime) }}
-            </div>
+            <template v-if="times.length > 0">
+              <div
+                  v-for="time in times"
+                  :key="time.startTime"
+                  class="time-slot"
+                  :class="{ 'disabled': time.themeTimeStatus === 'DISABLE', 'selected': selectedTime === time }"
+                  @click="time.themeTimeStatus === 'ENABLE' ? selectTime(time) : null">
+                {{ formatTime(time.startTime) }}
+              </div>
+            </template>
+            <template v-else>
+              <p class="no-time-slots-message">예약 가능한 시간대가 존재하지 않습니다.</p>
+            </template>
           </div>
+
 
           <button v-if="selectedTime" @click="book(this.selectedTimeId, this.player, this.price)" style="margin-top: 1rem;">예약하기</button>
         </div>
@@ -82,9 +88,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import apiSearch from '@/api/Search.js'
 
-// var idid = null;
 export default {
   data() {
     return {
@@ -165,7 +169,14 @@ export default {
   },
   methods: {
     ...mapActions('axios', ['axiosSearchRequest', 'axiosReservationRequest', 'axiosConsumerRequest']),
-
+    // async fetchStore(storeId) {
+    //   try {
+    //     const response = await this.axiosSearchRequest({
+    //       method: 'get',
+    //       url: ''
+    //     })
+    //   }
+    // },
     async fetchTheme(storeId) {
       try {
         const response = await this.axiosSearchRequest({
@@ -218,25 +229,6 @@ export default {
         alert(errorMessage);
       }
     },
-    // selectTheme(themeId) {
-    //   idid = themeId;
-    //   apiSearch.getThemesInfo(themeId, this.storeId)
-    //     .then(response => {
-    //       console.log(response);
-    //       this.selectedTheme = response.data.data;
-    //
-    //       // 날짜와 시간을 초기화
-    //       this.selectedDate = null;
-    //       this.selectedTime = null;
-    //       this.selectedTimeId = null;  // 추가: 시간 ID 초기화
-    //       this.times = [];
-    //       this.player = null;
-    //       this.price = null;
-    //     })
-    //     .catch(e => {
-    //       console.log(e);
-    //     })
-    // },
     updateDetails() {
       this.difficultyStars = this.computeDifficultyStars();
     },
