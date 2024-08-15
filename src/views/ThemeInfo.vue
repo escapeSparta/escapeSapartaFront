@@ -171,15 +171,14 @@ export default {
   },
   methods: {
     ...mapActions('axios', ['axiosSearchRequest', 'axiosReservationRequest', 'axiosConsumerRequest']),
-
-    async fetchStore(storeId) {
-      try {
-        const response = await this.axiosSearchRequest({
-          method: 'get',
-          url: ''
-        })
-      }
-    },
+    // async fetchStore(storeId) {
+    //   try {
+    //     const response = await this.axiosSearchRequest({
+    //       method: 'get',
+    //       url: ''
+    //     })
+    //   }
+    // },
     async fetchTheme(storeId) {
       try {
         const response = await this.axiosSearchRequest({
