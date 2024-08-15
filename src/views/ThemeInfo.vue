@@ -493,11 +493,6 @@ h1, h2, h3 {
   align-items: center;
 }
 
-.star {
-  font-size: 1.2em;
-  color: #0f0;
-}
-
 .date-picker {
   margin-bottom: 1rem;
 }
@@ -656,5 +651,10 @@ button.selected {
   margin-top: 1rem;
 }
 
+.no-time-slots-message {
+  grid-column: span 2; /* 이 속성으로 메시지가 한 줄에 걸쳐서 나오도록 설정 */
+  text-align: center;
+  white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 설정 */
+}
 
 </style>
