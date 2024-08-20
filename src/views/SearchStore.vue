@@ -176,7 +176,6 @@ body, html {
 }
 h1, h2 {
   text-align: center;
-  margin-top: 5rem;
   text-shadow: 0 0 15px #0f0;
 }
 .search-section {

@@ -2,9 +2,15 @@
   <div>
     <div class="container">
       <h1>방탈출 예약하기</h1>
-      <div class="store-info">
-        <h2>{{ this.storeTitle }}</h2>
-        <button @click="followStore(this.storeId)" class="follow-button">팔로우하기</button>
+      <div class="store-info" v-if="store">
+        <img class="store-image" :src="this.store.storeImage" alt="Store Image" width="200" height="200" />
+        <div class="store-details">
+          <h2>{{ this.store.storeName }}</h2>
+          <p><strong>전화번호:</strong> {{ this.store.phoneNumber }}</p>
+          <p><strong>주소:</strong> {{ this.store.address }}</p>
+          <p><strong>운영 시간:</strong> {{ this.store.workHours }}</p>
+        </div>
+        <button @click="followStore(storeId)" class="follow-button">팔로우하기</button>
       </div>
       <div class="booking-container">
         <div class="theme-list">
@@ -92,6 +98,7 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
+      store: null,
       themes: [],
       selectedTheme: null,
       selectedDate: null,
@@ -110,14 +117,8 @@ export default {
   mounted() {
     console.log(this.storeId);
     console.log(this.storeTitle);
+    this.fetchStore(this.storeId);
     this.fetchTheme(this.storeId);
-    // apiSearch.getThemes(null, null, null, null, this.storeId)
-    //   .then(response => {
-    //     this.themes = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //   });
   },
 
   watch: {
@@ -169,14 +170,23 @@ export default {
   },
   methods: {
     ...mapActions('axios', ['axiosSearchRequest', 'axiosReservationRequest', 'axiosConsumerRequest']),
-    // async fetchStore(storeId) {
-    //   try {
-    //     const response = await this.axiosSearchRequest({
-    //       method: 'get',
-    //       url: ''
-    //     })
-    //   }
-    // },
+    async fetchStore(storeId) {
+      try {
+        const response = await this.axiosSearchRequest({
+          method: 'get',
+          url: `/search/stores/${storeId}/info`
+        })
+        this.store = response.data.data;
+        console.log(this.store);
+      } catch(error) {
+        let errorMessage = '오류가 발생했습니다.';
+        if (error.response && error.response.data) {
+          errorMessage = error.response.data.message;
+        }
+        console.error('Error : ', error);
+        alert(errorMessage);
+      }
+    },
     async fetchTheme(storeId) {
       try {
         const response = await this.axiosSearchRequest({
@@ -365,7 +375,8 @@ body, html {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 header {
@@ -375,13 +386,6 @@ header {
   width: 100%;
   top: 0;
   z-index: 1000;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #0f0;
-  text-shadow: 0 0 10px #0f0;
 }
 
 nav {
@@ -408,6 +412,37 @@ nav a:hover {
 h1, h2, h3 {
   text-shadow: 0 0 15px #0f0;
 }
+.store-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 255, 0, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #0f0;
+  margin-bottom: 2rem;
+}
+
+.store-image {
+  border-radius: 10px;
+  max-width: 200px;
+}
+
+.store-details {
+  flex-grow: 1;
+  margin-left: 2rem;
+}
+
+.follow-button {
+  background-color: #0f0;
+  color: #000;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
 
 .booking-container {
   display: flex;
