@@ -27,13 +27,6 @@ export default {
   },
   mounted() {
     this.fetchTopStores();
-    // apiSearch.getStores(null, null, null, null, null, null)
-    //   .then(response => {
-    //     this.stores = response.data.data.content;  // response.data가 themes 배열을 포함한다고 가정합니다.
-    //   })
-    //   .catch(e => {
-    //     console.log(e);
-    //   });
   },
   methods: {
     ...mapActions('axios', ['axiosSearchRequest']),
@@ -43,7 +36,7 @@ export default {
           method: 'get',
           url: '/search/top-stores'
         })
-        this.stores = response.data.data;
+        this.stores = response.data.data.responseDtoList;
       } catch(error) {
 
       }
